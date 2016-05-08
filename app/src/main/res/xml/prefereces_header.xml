@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <header
+        android:fragment="com.david.proyecto.ciclo.siguealciclista.preferencias.Usuario"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:summary="Preferencias de usuario"
+        android:title="Usuario"/>
+    <header
+        android:fragment="com.david.proyecto.ciclo.siguealciclista.preferencias.Ruta"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:summary="Preferencias de la ruta"
+        android:title="Ruta"/>
+
+</preference-headers>

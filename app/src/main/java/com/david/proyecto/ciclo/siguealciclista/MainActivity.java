@@ -91,19 +91,17 @@ public class MainActivity extends AppCompatActivity
                 System.out.println(fechaEnQueCambia);
                 notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(getApplicationContext(), fechaEnQueCambia, "2"));
                 System.out.println("ruta total " + new Firebase(FIREBASE_URL).child(snapshot.getValue().toString()));
-//                System.out.println("query: "+new Firebase(FIREBASE_URL).child(FIREBASE_RUTA).);
 
-//                DatosFirebase datosFirebase=snapshot.getValue(DatosFirebase.class);
-//                System.out.println(datosFirebase);
-//                System.out.println(datosFirebase.getUsuario()+"------");
+                //System.out.println("query: "+new Firebase(FIREBASE_URL).child(FIREBASE_RUTA).);
+                //DatosFirebase datosFirebase=snapshot.getValue(DatosFirebase.class);
+                //System.out.println(datosFirebase);
+                //System.out.println(datosFirebase.getUsuario()+"------");
 
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
 
             @Override
-            public void onCancelled(FirebaseError error)
-            {
-            }
+            public void onCancelled(FirebaseError error){}
         });*/
     }
 
@@ -133,14 +131,13 @@ public class MainActivity extends AppCompatActivity
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();  //TODO finish daba errores
+                finish();  // TODO finish daba errores (sin tener las lineas anteriores)
                 // android.os.Process.killProcess(android.os.Process.myPid());
                 break;
         }
 
         return true;
     }
-
     // Fin menú
 
 

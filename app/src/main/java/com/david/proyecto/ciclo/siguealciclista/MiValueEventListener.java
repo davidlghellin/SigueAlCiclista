@@ -16,15 +16,27 @@ import com.firebase.client.ValueEventListener;
  */
 public class MiValueEventListener implements ValueEventListener
 {
+    private final String FIREBASE_URL;
     private Activity activity;
-    private String FIREBASE_URL;
-    NotificationManager notificationManager;
+    private NotificationManager notificationManager;
+
+    public MiValueEventListener(Activity activity)
+    {
+        this.activity = activity;
+        FIREBASE_URL = "https://sigue-al-ciclista.firebaseio.com/";
+    }
+
+    public MiValueEventListener(String FIREBASE_URL, NotificationManager notificationManager)
+    {
+        this.FIREBASE_URL = FIREBASE_URL;
+        this.notificationManager = notificationManager;
+        FIREBASE_URL = "https://sigue-al-ciclista.firebaseio.com/";
+    }
 
     public MiValueEventListener(Activity activity, String FIREBASE_URL)
     {
         this.activity = activity;
         this.FIREBASE_URL = FIREBASE_URL;
-
     }
 
     public MiValueEventListener(Activity activity, String FIREBASE_URL, NotificationManager notificationManager)

@@ -1,5 +1,6 @@
 package com.david.proyecto.ciclo.siguealciclista;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -17,11 +18,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
 import com.david.proyecto.ciclo.siguealciclista.preferencias.MisFragmentPreferencias;
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.firebase.client.core.Path;
+import com.firebase.client.snapshot.ChildKey;
 
 import java.util.Date;
 
@@ -31,11 +36,11 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity
 {
-
     private String FIREBASE_URL = "https://sigue-al-ciclista.firebaseio.com/";
     private String DIA = (new Date()).toString();
-    private String FIREBASE_COORDENADAS = "Coordenadas";
-    private String FIREBASE_RUTA = "Ruta";
+    //private String FIREBASE_COORDENADAS = "Coordenadas/mm";
+    private String FIREBASE_COORDENADAS = "Ruta nueva/Actual";
+    private String FIREBASE_RUTA = "Ruta nueva";
     // private String ULTIMA="ultima";
     private Coordenadas coordenadas;
     private Date fechaAux;
@@ -53,7 +58,6 @@ public class MainActivity extends AppCompatActivity
     private Firebase myFirebaseRef;
     private Firebase myFireNombreRuta;
     private NotificationManager notificationManager;
-    String mensaje;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,7 +67,8 @@ public class MainActivity extends AppCompatActivity
 
         Firebase.setAndroidContext(this);
         ButterKnife.bind(this);
-
+        findViewById(R.id.relativeLayoutPrincipal).setBackgroundColor(Color.BLUE);
+        // findViewById(R.id.relativeLayoutPrincipal).setBackground(getResources().getDrawable(R.drawable.boton_cuircular));
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 
@@ -73,27 +78,25 @@ public class MainActivity extends AppCompatActivity
         myFirebaseRef = new Firebase(FIREBASE_URL).child(FIREBASE_COORDENADAS);
         myFireNombreRuta = new Firebase(FIREBASE_URL);
 
-        myFirebaseRef.addValueEventListener(new ValueEventListener()
+        myFirebaseRef.addValueEventListener(new MiValueEventListener(MainActivity.this, FIREBASE_URL, notificationManager));
+        /*myFirebaseRef.addValueEventListener(new ValueEventListener()
         {
+
             @Override
             public void onDataChange(DataSnapshot snapshot)
             {
-                Toast.makeText(MainActivity.this, snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
-                Log.e(getLocalClassName(), snapshot.getValue().toString());
-                System.out.println(snapshot.getValue());
+                String fechaEnQueCambia = snapshot.getValue().toString();
+                Toast.makeText(MainActivity.this, fechaEnQueCambia, Toast.LENGTH_SHORT).show();
+                Log.e(getLocalClassName(), "se produce cambio " + fechaEnQueCambia);
+                System.out.println(fechaEnQueCambia);
+                notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(getApplicationContext(), fechaEnQueCambia, "2"));
+                System.out.println("ruta total " + new Firebase(FIREBASE_URL).child(snapshot.getValue().toString()));
+//                System.out.println("query: "+new Firebase(FIREBASE_URL).child(FIREBASE_RUTA).);
 
-                Notification notification = new NotificationCompat.Builder(getApplicationContext())
-                        .setSmallIcon(R.mipmap.ic_ciclista)
-                        .setContentTitle("Coordenadas")
-                        .setContentText("Se suben coordendas nuevas")
-                        .setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_VIBRATE)
-                        .setDefaults(Notification.DEFAULT_SOUND)
-                        .setLights(Color.RED, 3000, 1000)
-                        .setAutoCancel(true)
-                        .build();
+//                DatosFirebase datosFirebase=snapshot.getValue(DatosFirebase.class);
+//                System.out.println(datosFirebase);
+//                System.out.println(datosFirebase.getUsuario()+"------");
 
-                notificationManager.notify(0, notification);
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
 
@@ -101,9 +104,7 @@ public class MainActivity extends AppCompatActivity
             public void onCancelled(FirebaseError error)
             {
             }
-        });
-        //TODO revisar si aqui o en ActivityEnCabeza
-        //new Thread(new MarcarRuta(this)).start();
+        });*/
     }
 
     // Menú
@@ -141,30 +142,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // Fin menú
-   /*@OnClick(R.id.button)
-    public void writeToFirebase()
-    {
-        fechaAux = new Date();
-        coordenadas.setLatitud(2);
-        coordenadas.setLongitud(23);
-        myFirebaseRef.child(fechaAux.toString()).child("Longitud").setValue(coordenadas.getLongitud());
-        myFirebaseRef.child(fechaAux.toString()).child("Latitud").setValue(coordenadas.getLatitud());
-        text.setText("");
 
-        Intent i = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
-
-        Notification notification = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_ciclista)
-                .setContentTitle("Coordenadas")
-                .setContentText("Se suben coordendas nuevas")
-                .setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setLights(Color.RED, 3000, 1000)
-                .setContentIntent(pendingIntent)
-                .build();
-        notificationManager.notify(0, notification);
-    }*/
 
     @OnClick(R.id.btnEnCabeza)
     void enCabeza()
@@ -207,4 +185,5 @@ public class MainActivity extends AppCompatActivity
                     child("Longitud").getSpec().getParams());
         }
     }
+
 }

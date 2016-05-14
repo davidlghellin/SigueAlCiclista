@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.david.proyecto.ciclo.siguealciclista.MainActivity">
+    tools:context="com.david.proyecto.ciclo.siguealciclista.MainActivity"
+    android:id="@+id/relativeLayoutPrincipal">
 
     <Button
         android:id="@+id/button"

@@ -10,8 +10,12 @@ import android.support.v7.app.NotificationCompat;
  */
 public class MisNotificaciones
 {
-    public static Notification mostrarNotificacion(Context context,String titulo,String texto)
+    public static Notification mostrarNotificacion(Context context, String titulo, String texto)
     {
+        System.out.println("Titulo:::   " + titulo);
+        System.out.println("Texto:::   " + texto);
+
+
         return new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_ciclista)
                 .setContentTitle(titulo)

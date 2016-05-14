@@ -3,7 +3,11 @@ package com.david.proyecto.ciclo.siguealciclista;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Date;
 
@@ -19,14 +23,17 @@ public class MarcarRuta implements Runnable
     private String nombreUsuario;
     private SharedPreferences prefs;
 
+    Mapa mapa;
+
     public MarcarRuta(Context context)
     {
         this.context = context;
         this.gps = new GPS(context);
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        nombreUsuario = prefs.getString("user", "user" + (int)(Math.random()*1000));
-        conectarFirebase= new ConectarFirebase(context,prefs.getString("ruta", "rutaPorDefecto"));
+        nombreUsuario = prefs.getString("user", "user" + (int) (Math.random() * 1000));
+        conectarFirebase = new ConectarFirebase(context, prefs.getString("ruta", "rutaPorDefecto"));
     }
+
 
     public boolean isContinuaHilo()
     {
@@ -46,7 +53,8 @@ public class MarcarRuta implements Runnable
             try
             {
                 gps.guardarLogCoordenadas();
-                conectarFirebase.subirDatos(gps.getCoordenadas(),new Date());
+                System.out.println(gps.getCoordenadas());
+                conectarFirebase.subirDatos(gps.getCoordenadas(), new Date());
                 Thread.sleep(5000);
             } catch (InterruptedException e)
             {

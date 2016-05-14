@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by wizord on 7/05/16.
@@ -115,4 +116,5 @@ public class GPS
             Log.i("Las coordenadas son: ", coordenadas.toString());
         }
     }
+
 }

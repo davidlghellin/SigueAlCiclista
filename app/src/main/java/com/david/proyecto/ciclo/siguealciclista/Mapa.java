@@ -29,12 +29,15 @@ public class Mapa
     public static final LatLng ALQUERIAS = new LatLng(38.014215, -1.035408);
     Activity activity;
 
-    public Mapa(Context context, GoogleMap mMap)
+    public Mapa(Context context,  Activity activity)
     {
-        this.mMap = mMap;
         this.context = context;
-    }
+        this.activity = activity;
 
+        GPS gpsActual = new GPS(context);
+        LatLng latLng = new LatLng(gpsActual.getCoordenadas().getLatitud(), gpsActual.getCoordenadas().getLongitud());
+        inicializarMapa(latLng);
+    }
     public Mapa(Context context, GoogleMap mMap, Activity activity)
     {
         this.mMap = mMap;

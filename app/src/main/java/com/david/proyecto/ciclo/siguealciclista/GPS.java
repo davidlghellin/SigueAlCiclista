@@ -16,6 +16,7 @@ import android.widget.Toast;
  */
 public class GPS
 {
+    //http://www.coordenadas-gps.com/
     /**
      * vbl para el manejo de las coordenadas
      */

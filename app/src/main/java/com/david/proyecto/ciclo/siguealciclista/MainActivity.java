@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
+import com.david.proyecto.ciclo.siguealciclista.BBDD.Utils;
 import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
 import com.david.proyecto.ciclo.siguealciclista.preferencias.MisFragmentPreferencias;
 import com.firebase.client.ChildEventListener;
@@ -75,34 +78,20 @@ public class MainActivity extends AppCompatActivity
         coordenadas = new Coordenadas();
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        myFirebaseRef = new Firebase(FIREBASE_URL).child(FIREBASE_COORDENADAS);
+        //myFirebaseRef = new Firebase(FIREBASE_URL).child(FIREBASE_COORDENADAS);
+        myFirebaseRef = new Firebase(FIREBASE_URL).child(preferencias.getRuta(getApplicationContext()) + "/Actual");
         myFireNombreRuta = new Firebase(FIREBASE_URL);
 
-        myFirebaseRef.addValueEventListener(new MiValueEventListener(MainActivity.this, FIREBASE_URL, notificationManager));
-        /*myFirebaseRef.addValueEventListener(new ValueEventListener()
-        {
 
-            @Override
-            public void onDataChange(DataSnapshot snapshot)
-            {
-                String fechaEnQueCambia = snapshot.getValue().toString();
-                Toast.makeText(MainActivity.this, fechaEnQueCambia, Toast.LENGTH_SHORT).show();
-                Log.e(getLocalClassName(), "se produce cambio " + fechaEnQueCambia);
-                System.out.println(fechaEnQueCambia);
-                notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(getApplicationContext(), fechaEnQueCambia, "2"));
-                System.out.println("ruta total " + new Firebase(FIREBASE_URL).child(snapshot.getValue().toString()));
+        actualizarRutaAct();
 
-                //System.out.println("query: "+new Firebase(FIREBASE_URL).child(FIREBASE_RUTA).);
-                //DatosFirebase datosFirebase=snapshot.getValue(DatosFirebase.class);
-                //System.out.println(datosFirebase);
-                //System.out.println(datosFirebase.getUsuario()+"------");
+        //myFirebaseRef.addValueEventListener(new MiValueEventListener(MainActivity.this, FIREBASE_URL, notificationManager));
 
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
 
-            @Override
-            public void onCancelled(FirebaseError error){}
-        });*/
+        ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, Utils.versionSQL());
+        SQLiteDatabase db = usdbh.getWritableDatabase();
+        usdbh.verDatos(db);
+        //Utils.borrarDatosSQL(db);
     }
 
     // Menú
@@ -135,11 +124,47 @@ public class MainActivity extends AppCompatActivity
                 // android.os.Process.killProcess(android.os.Process.myPid());
                 break;
         }
-
+        actualizarRutaAct();
         return true;
     }
     // Fin menú
 
+
+    /**
+     * Volvemos a la actividad
+     */
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        actualizarRutaAct();
+    }
+
+    /**
+     * Método de actualiza el MiValueEventListener
+     */
+    private void actualizarRutaAct()
+    {
+        // TODO: 15/05/16  intentar varias veces
+        int i = 0;
+        boolean ok = false;
+        while (i < 3 && !ok)
+        {
+            try
+            {
+                Log.i("Listener", "Actualizamos datos en actualizarRutaAct");
+                myFirebaseRef.addValueEventListener(new MiValueEventListener(MainActivity.this, FIREBASE_URL, notificationManager));
+                ok = true;
+            } catch (Exception e)
+            {
+                ok = false;
+                Log.e("Listener", "Error en actualizarRutaAct");
+            } finally
+            {
+                i++;
+            }
+        }
+    }
 
     @OnClick(R.id.btnEnCabeza)
     void enCabeza()

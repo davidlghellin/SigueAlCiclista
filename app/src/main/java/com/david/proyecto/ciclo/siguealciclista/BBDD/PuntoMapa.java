@@ -1,7 +1,10 @@
 package com.david.proyecto.ciclo.siguealciclista.BBDD;
 
 import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
+import com.david.proyecto.ciclo.siguealciclista.helpers.fechaHelper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -9,13 +12,16 @@ import java.util.Date;
  */
 public class PuntoMapa
 {
-    private Date fecha;
+    private String fecha;
     private String ruta;
     private String user;
     private Coordenadas coordenadas;
 
-    public PuntoMapa(){}
-    public PuntoMapa(Date fecha, String ruta, String user, Coordenadas coordenadas)
+    public PuntoMapa()
+    {
+    }
+
+    public PuntoMapa(String fecha, String ruta, String user, Coordenadas coordenadas)
     {
         this.fecha = fecha;
         this.ruta = ruta;
@@ -23,12 +29,17 @@ public class PuntoMapa
         this.coordenadas = coordenadas;
     }
 
-    public Date getFecha()
+    public String getFecha()
     {
         return fecha;
     }
 
-    public void setFecha(Date fecha)
+    public void setFecha(Date strFecha)
+    {
+        this.fecha = fechaHelper.converterFecha(strFecha);
+    }
+
+    public void setFecha(String fecha)
     {
         this.fecha = fecha;
     }
@@ -61,5 +72,16 @@ public class PuntoMapa
     public void setCoordenadas(Coordenadas coordenadas)
     {
         this.coordenadas = coordenadas;
+    }
+
+    public void setCoordenadas(float longitud, float latitud)
+    {
+        this.coordenadas = new Coordenadas(longitud, latitud);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "PuntoMapa {" + "fecha=" + fecha + ", ruta='" + ruta + '\'' + ", user='" + user + '\'' + ", coordenadas=" + coordenadas + '}';
     }
 }

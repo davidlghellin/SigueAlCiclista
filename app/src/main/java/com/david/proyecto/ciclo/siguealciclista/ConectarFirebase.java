@@ -70,4 +70,8 @@ public class ConectarFirebase
         Coordenadas coordenadas = new Coordenadas();
         subirDatos(coordenadas, new Date());
     }
+    public void crearActual()
+    {
+        myFireNombreRuta.child(textoRuta).child("Actual").setValue(fechaHelper.converterFecha(new Date()));
+    }
 }

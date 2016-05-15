@@ -2,6 +2,7 @@
 <manifest package="com.david.proyecto.ciclo.siguealciclista"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Permisos asociados al proyecto -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -25,15 +26,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityEnCabeza">
-        </activity>
+        <activity android:name=".ActivityEnCabeza"/>
         <activity android:name=".preferencias.MisFragmentPreferencias"/>
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
-        </activity>
-        <activity android:name=".ActivitySeguidor">
-        </activity>
+            android:label="@string/title_activity_maps"/>
+        <activity android:name=".ActivitySeguidor"/>
     </application>
 
 </manifest>

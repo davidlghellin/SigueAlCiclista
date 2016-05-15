@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -49,19 +50,46 @@ public class MiValueEventListener implements ValueEventListener
     @Override
     public void onDataChange(DataSnapshot snapshot)
     {
-        String fechaEnQueCambia = snapshot.getValue().toString();
-        Toast.makeText(activity, fechaEnQueCambia, Toast.LENGTH_SHORT).show();
-        Log.e(activity.getLocalClassName(), "se produce cambio " + fechaEnQueCambia);
-        System.out.println(fechaEnQueCambia);
-        notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(activity.getApplicationContext(), fechaEnQueCambia, "2"));
-        System.out.println("ruta total " + new Firebase(FIREBASE_URL).child(snapshot.getValue().toString()));
+        String fechaEnQueCambia = null;
+        try
+        {
+            fechaEnQueCambia = snapshot.getValue().toString();
+
+            Toast.makeText(activity, fechaEnQueCambia, Toast.LENGTH_SHORT).show();
+            Log.e(activity.getLocalClassName(), "se produce cambio " + fechaEnQueCambia);
+            System.out.println(fechaEnQueCambia);
+            notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(activity.getApplicationContext(), fechaEnQueCambia, "2"));
+            System.out.println("ruta total " + new Firebase(FIREBASE_URL).child(snapshot.getValue().toString()));
 //                System.out.println("query: "+new Firebase(FIREBASE_URL).child(FIREBASE_RUTA).);
 
 //                DatosFirebase datosFirebase=snapshot.getValue(DatosFirebase.class);
 //                System.out.println(datosFirebase);
 //                System.out.println(datosFirebase.getUsuario()+"------");
 
-        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } catch (Exception e)
+        {
+            //conectarFirebase = new ConectarFirebase(context, prefs.getString("ruta", "rutaPorDefecto"));
+            System.out.println("catcha entraaaa");
+            ConectarFirebase conectarFirebase = new ConectarFirebase(
+                    activity.getApplicationContext(),
+                    preferencias.getRuta(activity.getApplicationContext()));
+            conectarFirebase.crearActual();
+            //fechaEnQueCambia = snapshot.getValue().toString();
+           // throw new ExceptionInInitializerError(e);
+        }
+//        Toast.makeText(activity, fechaEnQueCambia, Toast.LENGTH_SHORT).show();
+//        Log.e(activity.getLocalClassName(), "se produce cambio " + fechaEnQueCambia);
+//        System.out.println(fechaEnQueCambia);
+//        notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(activity.getApplicationContext(), fechaEnQueCambia, "2"));
+//        System.out.println("ruta total " + new Firebase(FIREBASE_URL).child(snapshot.getValue().toString()));
+////                System.out.println("query: "+new Firebase(FIREBASE_URL).child(FIREBASE_RUTA).);
+//
+////                DatosFirebase datosFirebase=snapshot.getValue(DatosFirebase.class);
+////                System.out.println(datosFirebase);
+////                System.out.println(datosFirebase.getUsuario()+"------");
+//
+//        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override

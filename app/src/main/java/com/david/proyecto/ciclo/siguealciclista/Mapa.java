@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 
@@ -29,7 +30,7 @@ public class Mapa
     public static final LatLng ALQUERIAS = new LatLng(38.014215, -1.035408);
     Activity activity;
 
-    public Mapa(Context context,  Activity activity)
+    public Mapa(Context context, Activity activity)
     {
         this.context = context;
         this.activity = activity;
@@ -38,6 +39,7 @@ public class Mapa
         LatLng latLng = new LatLng(gpsActual.getCoordenadas().getLatitud(), gpsActual.getCoordenadas().getLongitud());
         inicializarMapa(latLng);
     }
+
     public Mapa(Context context, GoogleMap mMap, Activity activity)
     {
         this.mMap = mMap;
@@ -138,4 +140,17 @@ GoogleMap.MAP_TYPE_TERRAIN - Muestra información topográfica como líneas de c
     {
         Polyline polyline = mMap.addPolyline(options);
     }
+    //    mapa.drawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.RED));
+
+
+    public void marcarRuta(LatLng puntoA, LatLng puntoB)
+    {
+        this.drawPolilyne(new PolylineOptions().add(puntoA).add(puntoB));
+    }
+
+    public void marcarRuta(LatLng puntoA, LatLng puntoB, int color)
+    {
+        this.drawPolilyne(new PolylineOptions().add(puntoA).add(puntoB).color(color));
+    }
+
 }

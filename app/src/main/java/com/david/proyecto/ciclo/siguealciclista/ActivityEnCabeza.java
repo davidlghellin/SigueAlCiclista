@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -13,6 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
+import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
+import com.david.proyecto.ciclo.siguealciclista.BBDD.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -24,6 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import butterknife.ButterKnife;
@@ -58,14 +63,75 @@ public class ActivityEnCabeza extends AppCompatActivity
         hilo.start();
 
         //mapa
-        LatLng latLng = new LatLng(gpsActual.getCoordenadas().getLatitud(), gpsActual.getCoordenadas().getLongitud());
+        final LatLng latLng = new LatLng(gpsActual.getCoordenadas().getLatitud(), gpsActual.getCoordenadas().getLongitud());
         // inicializarMapa(latLng);
 
-        mapa = new Mapa(getApplicationContext(),  this);
+        mapa = new Mapa(getApplicationContext(), this);
         mapa.setMarker(ALQUERIAS, "Alquerías", " Murcia");
         mapa.setMarker(new LatLng(38.014215, -1.036), "PTO2", " Murcssssssia");
 
-        mapa.drawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.RED));
+        final ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, Utils.versionSQL());
+        final SQLiteDatabase db = usdbh.getWritableDatabase();
+        usdbh.verDatos(db);
+
+        class MyAsync extends AsyncTask<Boolean, Mapa, ArrayList<PuntoMapa>>
+        {
+            Mapa mapa2;
+            boolean color;
+
+            @Override
+            protected void onPreExecute()
+            {
+                mapa2 = mapa;
+            }
+
+            @Override
+            protected void onProgressUpdate(Mapa... values)
+            {
+                //TODO actualizar el mapa
+                super.onProgressUpdate(values);
+                if (color)
+                {
+                    mapa2.drawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.RED));
+                } else
+                {
+                    mapa2.drawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.BLUE));
+                }
+                color = !color;
+            }
+
+            @Override
+            protected ArrayList<PuntoMapa> doInBackground(Boolean... params)
+            {
+                try
+                {
+                    while (true)
+                    {
+                        //TODO cada X tiempo consultamos la base de datos para refrescar el mapa
+                        Thread.sleep(1000);
+                        publishProgress();
+                    }
+                } catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+                ArrayList<PuntoMapa> puntoMapas = usdbh.getDatos(db);
+                return puntoMapas;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<PuntoMapa> puntoMapas)
+            {
+                super.onPostExecute(puntoMapas);
+                //TODO cuando ha terminado de cargar los datos
+                mapa2.drawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.RED));
+            }
+        }
+
+        MyAsync my = new MyAsync();
+        my.execute();
+
+        //mapa.drawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.RED));
         //setMarker(ALQUERIAS, "Alquerías", " Murcia"); // Agregamos el marcador
         //setMarker(new LatLng(38.014215, -1.036), "PTO2", " Murcia"); // Agregamos el marcador
         //setMarker(new LatLng(38.01422, -1.0365), "PTO3", " Murcia"); // Agregamos el marcador

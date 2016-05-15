@@ -69,14 +69,8 @@ public class MiValueEventListener implements ValueEventListener
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } catch (Exception e)
         {
-            //conectarFirebase = new ConectarFirebase(context, prefs.getString("ruta", "rutaPorDefecto"));
-            System.out.println("catcha entraaaa");
-            ConectarFirebase conectarFirebase = new ConectarFirebase(
-                    activity.getApplicationContext(),
-                    preferencias.getRuta(activity.getApplicationContext()));
-            conectarFirebase.crearActual();
-            //fechaEnQueCambia = snapshot.getValue().toString();
-           // throw new ExceptionInInitializerError(e);
+            new ConectarFirebase(activity.getApplicationContext(),preferencias.getRuta(activity.getApplicationContext()))
+                    .crearActual();
         }
 //        Toast.makeText(activity, fechaEnQueCambia, Toast.LENGTH_SHORT).show();
 //        Log.e(activity.getLocalClassName(), "se produce cambio " + fechaEnQueCambia);

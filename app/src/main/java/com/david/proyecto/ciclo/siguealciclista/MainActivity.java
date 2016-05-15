@@ -40,13 +40,10 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity
 {
     private String FIREBASE_URL = "https://sigue-al-ciclista.firebaseio.com/";
-    private String DIA = (new Date()).toString();
     //private String FIREBASE_COORDENADAS = "Coordenadas/mm";
     private String FIREBASE_COORDENADAS = "Ruta nueva/Actual";
     private String FIREBASE_RUTA = "Ruta nueva";
-    // private String ULTIMA="ultima";
     private Coordenadas coordenadas;
-    private Date fechaAux;
 
     @Bind(R.id.editText)
     EditText text;
@@ -91,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, Utils.versionSQL());
         SQLiteDatabase db = usdbh.getWritableDatabase();
         usdbh.verDatos(db);
-        //Utils.borrarDatosSQL(db);
+       // Utils.borrarDatosSQL(db);
     }
 
     // Menú

@@ -27,6 +27,10 @@ public class GPS
     private Location loc;
     private Context context;
 
+    /**
+     * Constructor pasando el contexto de la actividad
+     * @param context
+     */
     public GPS(Context context)
     {
         this.context = context;

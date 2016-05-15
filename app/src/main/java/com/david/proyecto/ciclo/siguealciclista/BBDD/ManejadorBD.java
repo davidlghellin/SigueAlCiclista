@@ -8,6 +8,8 @@ import android.util.Log;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by wizord on 14/05/16.
@@ -23,14 +25,14 @@ public class ManejadorBD extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        Log.i("BBDD","La base de datos se ha creado");
+        Log.i("BBDD", "La base de datos se ha creado");
         db.execSQL(bbdd());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        Log.i("BBDD","La base de datos se ha actualizado");
+        Log.i("BBDD", "La base de datos se ha actualizado");
         //Se elimina la versión anterior de la tabla
         db.execSQL("DROP TABLE IF EXISTS PuntoMapa;");
         //Se crea la nueva versión de la tabla
@@ -39,7 +41,7 @@ public class ManejadorBD extends SQLiteOpenHelper
 
     public void borrarBBDD(SQLiteDatabase db)
     {
-        Log.i("BBDD","La base de datos se ha borrado");
+        Log.i("BBDD", "La base de datos se ha borrado");
         db.execSQL("DROP TABLE IF EXISTS PuntoMapa;");
         db.execSQL(bbdd());
     }
@@ -61,7 +63,7 @@ public class ManejadorBD extends SQLiteOpenHelper
         return sb.toString();
     }
 
-    public void verDatos(SQLiteDatabase db)
+    public ArrayList<PuntoMapa> getDatos(SQLiteDatabase db)
     {
         ArrayList<PuntoMapa> datos = new ArrayList<>();
         System.out.println("DATOSSSS");
@@ -75,11 +77,32 @@ public class ManejadorBD extends SQLiteOpenHelper
                 punto.setFecha(c.getString(i++));
                 punto.setRuta(c.getString(i++));
                 punto.setUser(c.getString(i++));
-                punto.setCoordenadas(c.getFloat(i++),c.getFloat(i++));
+                punto.setCoordenadas(c.getFloat(i++), c.getFloat(i++));
 
                 datos.add(punto);
             } while (c.moveToNext());
         }
+        return datos;
+    }
+
+
+    public void verDatosSinRepetir(SQLiteDatabase db)
+    {
+        ArrayList<PuntoMapa> datos = getDatos(db);
+        PuntoMapa aux = new PuntoMapa();
+        for (PuntoMapa p : datos)
+        {
+            if (p.getCoordenadas().getLongitud() != aux.getCoordenadas().getLongitud() &&
+                    p.getCoordenadas().getLatitud() != aux.getCoordenadas().getLatitud())
+                System.out.println(p);
+
+            aux.setCoordenadas(p.getCoordenadas());
+        }
+    }
+    public void verDatos(SQLiteDatabase db)
+    {
+
+        ArrayList<PuntoMapa> datos = getDatos(db);
         for (PuntoMapa p : datos)
         {
             System.out.println(p);

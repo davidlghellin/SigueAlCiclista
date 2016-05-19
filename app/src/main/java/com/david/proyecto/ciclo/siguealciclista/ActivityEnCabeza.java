@@ -1,35 +1,18 @@
 package com.david.proyecto.ciclo.siguealciclista;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
-import com.david.proyecto.ciclo.siguealciclista.BBDD.Utils;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
+import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -70,7 +53,7 @@ public class ActivityEnCabeza extends AppCompatActivity
         mapa.setMarker(ALQUERIAS, "Alquerías", " Murcia");
         mapa.setMarker(new LatLng(38.014215, -1.036), "PTO2", " Murcssssssia");
 
-        final ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, Utils.versionSQL());
+        final ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, UtilsBBDD.versionSQL());
         final SQLiteDatabase db = usdbh.getWritableDatabase();
         usdbh.verDatos(db);
 
@@ -130,7 +113,6 @@ public class ActivityEnCabeza extends AppCompatActivity
 
         MyAsync my = new MyAsync();
         my.execute();
-
         //mapa.drawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.RED));
         //setMarker(ALQUERIAS, "Alquerías", " Murcia"); // Agregamos el marcador
         //setMarker(new LatLng(38.014215, -1.036), "PTO2", " Murcia"); // Agregamos el marcador
@@ -142,7 +124,11 @@ public class ActivityEnCabeza extends AppCompatActivity
     @OnClick(R.id.btnCancelarSeguimiento)
     public void cancelarSeguimiento()
     {
-        marcarRuta.setContinuaHilo(false);
+       // marcarRuta.setContinuaHilo(false);
+        mapa=null;
+        System.gc();
+
+        android.os.Process.killProcess(android.os.Process.myPid());
         finish();
     }
 
@@ -151,5 +137,12 @@ public class ActivityEnCabeza extends AppCompatActivity
     {
         super.onStop();
         marcarRuta.setContinuaHilo(false);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        //TODO probar a poner el onCreate en un método e incluirlo aquí
     }
 }

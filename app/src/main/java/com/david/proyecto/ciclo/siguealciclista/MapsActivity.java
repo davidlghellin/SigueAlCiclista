@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
-import com.david.proyecto.ciclo.siguealciclista.BBDD.Utils;
+import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -75,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void pintarRuta()
     {
-        ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, Utils.versionSQL());
+        ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, UtilsBBDD.versionSQL());
         SQLiteDatabase db = usdbh.getWritableDatabase();
         usdbh.verDatos(db);
         ArrayList<PuntoMapa> datos=usdbh.getDatos(db);

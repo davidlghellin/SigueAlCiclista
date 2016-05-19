@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -85,20 +87,63 @@ public class ManejadorBD extends SQLiteOpenHelper
         return datos;
     }
 
+    private boolean comprobarCoordenada(SQLiteDatabase db, PuntoMapa puntoMapa)
+    {
+        Cursor c = db.rawQuery("SELECT * FROM PuntoMapa " +
+                "WHERE longitud = \"" + puntoMapa.getCoordenadas().getLongitud() + "\" " +
+                "AND latitud = \"" + puntoMapa.getCoordenadas().getLatitud() + "\"", null);
+        if (c.getCount() <= 0)
+            return false;
+
+        return true;
+    }
+
+    public boolean insertarCoordenada(SQLiteDatabase db, PuntoMapa p)
+    {
+        if (!comprobarCoordenada(db, p))//no existe insertamos
+        {
+            if (p.getFecha() == null || p.getRuta() == null || p.getUser() == null)
+                return false;
+            try
+            {
+                insertarPuntoMapa(db, p);
+                Log.i("BBDD", "Añadimos registro a BBDD");
+            } catch (Exception e)
+            {
+                Log.e("BBDD", "Error al añadir registro a BBDD");
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void insertarPuntoMapa(SQLiteDatabase db, PuntoMapa p)
+    {
+        db.execSQL("INSERT INTO PuntoMapa " +
+                " (fecha,ruta,user,longitud,latitud)" +
+                " VALUES ('" + p.getFecha() + "','" +
+                p.getRuta() + "','" +
+                p.getUser() + "','" +
+                p.getCoordenadas().getLongitud() + "','" +
+                p.getCoordenadas().getLatitud() +
+                "');");
+    }
 
     public void verDatosSinRepetir(SQLiteDatabase db)
     {
         ArrayList<PuntoMapa> datos = getDatos(db);
-        PuntoMapa aux = new PuntoMapa();
+        PuntoMapa aux = new PuntoMapa(new Coordenadas(0.f, 0.f));
         for (PuntoMapa p : datos)
         {
-            if (p.getCoordenadas().getLongitud() != aux.getCoordenadas().getLongitud() &&
-                    p.getCoordenadas().getLatitud() != aux.getCoordenadas().getLatitud())
-                System.out.println(p);
-
-            aux.setCoordenadas(p.getCoordenadas());
+            if (p.distintos(aux))
+            {
+                System.out.println(p + "ddddd");
+                aux.setCoordenadas(p.getCoordenadas());
+            }
         }
     }
+
     public void verDatos(SQLiteDatabase db)
     {
 

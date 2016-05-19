@@ -1,7 +1,5 @@
 package com.david.proyecto.ciclo.siguealciclista;
 
-import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,26 +8,18 @@ import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
-import com.david.proyecto.ciclo.siguealciclista.BBDD.Utils;
+import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
 import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
 import com.david.proyecto.ciclo.siguealciclista.preferencias.MisFragmentPreferencias;
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-import com.firebase.client.core.Path;
-import com.firebase.client.snapshot.ChildKey;
 
 import java.util.Date;
 
@@ -85,10 +75,10 @@ public class MainActivity extends AppCompatActivity
         //myFirebaseRef.addValueEventListener(new MiValueEventListener(MainActivity.this, FIREBASE_URL, notificationManager));
 
 
-        ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, Utils.versionSQL());
+        ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, UtilsBBDD.versionSQL());
         SQLiteDatabase db = usdbh.getWritableDatabase();
         usdbh.verDatos(db);
-       // Utils.borrarDatosSQL(db);
+       // UtilsBBDD.borrarDatosSQL(db);
     }
 
     // Menú

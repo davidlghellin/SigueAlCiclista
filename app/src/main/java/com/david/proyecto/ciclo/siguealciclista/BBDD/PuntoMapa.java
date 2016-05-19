@@ -21,6 +21,11 @@ public class PuntoMapa
     {
     }
 
+    public PuntoMapa(Coordenadas coordenadas)
+    {
+        this.coordenadas = coordenadas;
+    }
+
     public PuntoMapa(String fecha, String ruta, String user, Coordenadas coordenadas)
     {
         this.fecha = fecha;
@@ -28,6 +33,7 @@ public class PuntoMapa
         this.user = user;
         this.coordenadas = coordenadas;
     }
+
 
     public String getFecha()
     {
@@ -77,6 +83,17 @@ public class PuntoMapa
     public void setCoordenadas(float longitud, float latitud)
     {
         this.coordenadas = new Coordenadas(longitud, latitud);
+    }
+
+    public boolean distintos(PuntoMapa puntoMapa)
+    {
+        boolean res = false;
+
+        if (this.getCoordenadas() != null && puntoMapa.getCoordenadas() != null)
+            if (this.getCoordenadas().getLongitud() != puntoMapa.getCoordenadas().getLongitud() &&
+                    this.getCoordenadas().getLatitud() != puntoMapa.getCoordenadas().getLatitud())
+                res = true;
+        return res;
     }
 
     @Override

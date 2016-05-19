@@ -26,7 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityEnCabeza"/>
+        <activity android:name=".ActivityEnCabeza"
+                  android:launchMode = "singleInstance"/>
         <activity android:name=".preferencias.MisFragmentPreferencias"/>
         <activity
             android:name=".MapsActivity"

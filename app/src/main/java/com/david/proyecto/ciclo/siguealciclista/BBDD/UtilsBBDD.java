@@ -6,7 +6,7 @@ import android.util.Log;
 /**
  * Created by wizord on 14/05/16.
  */
-public class Utils
+public class UtilsBBDD
 {
     /**
      * Método para que sea coherente los números de versiones y tengamos en todos las llamadas el mismo número de versión

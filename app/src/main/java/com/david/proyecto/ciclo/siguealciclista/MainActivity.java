@@ -30,10 +30,6 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity
 {
     private String FIREBASE_URL = "https://sigue-al-ciclista.firebaseio.com/";
-    //private String FIREBASE_COORDENADAS = "Coordenadas/mm";
-    private String FIREBASE_COORDENADAS = "Ruta nueva/Actual";
-    private String FIREBASE_RUTA = "Ruta nueva";
-    private Coordenadas coordenadas;
 
     @Bind(R.id.editText)
     EditText text;
@@ -41,12 +37,9 @@ public class MainActivity extends AppCompatActivity
     Button button;
     @Bind(R.id.btnEnCabeza)
     Button btnEnCabeza;
-    @Bind(R.id.editRutaNueva)
-    EditText textRutaNueva;
 
 
     private Firebase myFirebaseRef;
-    private Firebase myFireNombreRuta;
     private NotificationManager notificationManager;
 
     @Override
@@ -59,26 +52,20 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         findViewById(R.id.relativeLayoutPrincipal).setBackgroundColor(Color.BLUE);
         // findViewById(R.id.relativeLayoutPrincipal).setBackground(getResources().getDrawable(R.drawable.boton_cuircular));
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-
-        coordenadas = new Coordenadas();
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         //myFirebaseRef = new Firebase(FIREBASE_URL).child(FIREBASE_COORDENADAS);
-        myFirebaseRef = new Firebase(FIREBASE_URL).child(preferencias.getRuta(getApplicationContext()) + "/Actual");
-        myFireNombreRuta = new Firebase(FIREBASE_URL);
-
+        // myFirebaseRef = new Firebase(FIREBASE_URL).child(preferencias.getRuta(getApplicationContext()) + "/Actual");
+        myFirebaseRef = new Firebase(FIREBASE_URL).child(preferencias.getRutaActual(getApplicationContext()));
 
         actualizarRutaAct();
-
         //myFirebaseRef.addValueEventListener(new MiValueEventListener(MainActivity.this, FIREBASE_URL, notificationManager));
-
 
         ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, UtilsBBDD.versionSQL());
         SQLiteDatabase db = usdbh.getWritableDatabase();
         usdbh.verDatos(db);
-       // UtilsBBDD.borrarDatosSQL(db);
+        // UtilsBBDD.borrarDatosSQL(db);
     }
 
     // Menú
@@ -158,41 +145,4 @@ public class MainActivity extends AppCompatActivity
     {
         startActivity(new Intent(getApplicationContext(), ActivityEnCabeza.class));
     }
-
-    @OnClick(R.id.btnAnyadirRutas)
-    public void anyadirRutas()
-    {
-        String textoRuta = textRutaNueva.getText().toString();
-        if (textoRuta != null && !textoRuta.equals(""))
-        {
-            String fecha = new Date().toString();
-            myFireNombreRuta.child(textoRuta).child("Actual").setValue(fecha);
-            myFireNombreRuta.child(textoRuta).child(fecha).child("Longitud").setValue("1");
-            myFireNombreRuta.child(textoRuta).child(fecha).child("Latitud").setValue("2");
-            //obtengo t0do
-            String textoServidor = myFireNombreRuta.child(textoRuta).child("Actual").child(fecha).getKey();
-            Log.e(getLocalClassName(), textoServidor);
-            Toast.makeText(MainActivity.this, textoServidor, Toast.LENGTH_SHORT).show();
-            //String textoPruebas = myFireNombreRuta.child(textoRuta).child("Actual").child(fecha).getKey().toString();
-
-
-            Log.e(getLocalClassName(), "--->" + myFireNombreRuta.child(textoRuta).child(textoServidor).
-                    child("Latitud").getKey());
-            Log.e(getLocalClassName(), "--->" + myFireNombreRuta.child(textoRuta).child(textoServidor).
-                    child("Longitud").getApp());
-            Log.e(getLocalClassName(), "--->" + myFireNombreRuta.child(textoRuta).child(textoServidor).
-                    child("Longitud").getAuth());
-            Log.e(getLocalClassName(), "--->" + myFireNombreRuta.child(textoRuta).child(textoServidor).
-                    child("Longitud").getParent());
-            Log.e(getLocalClassName(), "--->" + myFireNombreRuta.child(textoRuta).child(textoServidor).
-                    child("Longitud").getRoot());
-            Log.e(getLocalClassName(), "--->" + myFireNombreRuta.child(textoRuta).child(textoServidor).
-                    child("Longitud").getRef());
-            Log.e(getLocalClassName(), "--->" + myFireNombreRuta.child(textoRuta).child(textoServidor).
-                    child("Longitud").getSpec().getParams());
-            Log.e(getLocalClassName(), "--->" + myFireNombreRuta.child(textoRuta).child(textoServidor).
-                    child("Longitud").getSpec().getParams());
-        }
-    }
-
 }

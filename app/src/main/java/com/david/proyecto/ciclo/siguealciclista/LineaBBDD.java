@@ -7,6 +7,7 @@ import java.util.Date;
  */
 public class LineaBBDD
 {
+    //TODO de momento no se usa, era para que fuera las tuplas de la bbdd
     private String carrera;
     private Date fecha;
     private String usuario;

@@ -3,8 +3,6 @@ package com.david.proyecto.ciclo.siguealciclista.BBDD;
 import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
 import com.david.proyecto.ciclo.siguealciclista.helpers.fechaHelper;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**

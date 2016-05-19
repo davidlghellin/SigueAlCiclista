@@ -20,6 +20,7 @@ public class MiValueEventListener implements ValueEventListener
     private final String FIREBASE_URL;
     private Activity activity;
     private NotificationManager notificationManager;
+    DatosFirebase datosFirebase;
 
     public MiValueEventListener(Activity activity)
     {
@@ -55,21 +56,38 @@ public class MiValueEventListener implements ValueEventListener
         {
             fechaEnQueCambia = snapshot.getValue().toString();
 
-            Toast.makeText(activity, fechaEnQueCambia, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(activity, fechaEnQueCambia, Toast.LENGTH_SHORT).show();
             Log.e(activity.getLocalClassName(), "se produce cambio " + fechaEnQueCambia);
             System.out.println(fechaEnQueCambia);
-            notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(activity.getApplicationContext(), fechaEnQueCambia, "2"));
+            //notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(activity.getApplicationContext(), fechaEnQueCambia, "2"));
             System.out.println("ruta total " + new Firebase(FIREBASE_URL).child(snapshot.getValue().toString()));
-//                System.out.println("query: "+new Firebase(FIREBASE_URL).child(FIREBASE_RUTA).);
 
-//                DatosFirebase datosFirebase=snapshot.getValue(DatosFirebase.class);
-//                System.out.println(datosFirebase);
-//                System.out.println(datosFirebase.getUsuario()+"------");
+            Log.i("CAMBIOSSS", "onDataChange: " + snapshot);
+            Log.i("CAMBIOSSS", "onDataChange: " + snapshot.getKey());
+            Log.i("CAMBIOSSS", "onDataChange: " + snapshot.getChildrenCount());
+
+
+            //TODO cuadno se produzca el cambio hay q buscar ese valor en la raiz de la ruta
+            //necesito la fecha para poner el valor en la linea de abajo y así obtener los datos
+            Firebase f = new Firebase(FIREBASE_URL + "/" + preferencias.getRuta(activity.getApplicationContext()) + "/19-05-2016 23:38:15");
+            f.addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot snapshot)
+                {
+                    Toast.makeText(activity.getApplicationContext(), snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onCancelled(FirebaseError error)
+                {
+                }
+            });
 
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } catch (Exception e)
         {
-            new ConectarFirebase(activity.getApplicationContext(),preferencias.getRuta(activity.getApplicationContext()))
+            new ConectarFirebase(activity.getApplicationContext(), preferencias.getRuta(activity.getApplicationContext()))
                     .crearActual();
         }
 //        Toast.makeText(activity, fechaEnQueCambia, Toast.LENGTH_SHORT).show();

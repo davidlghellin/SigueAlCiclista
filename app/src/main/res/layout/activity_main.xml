@@ -28,24 +28,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"/>
 
-    <EditText
-        android:id="@+id/editRutaNueva"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/btnAnyadirRutas"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"/>
-
-    <Button
-        android:id="@+id/btnAnyadirRutas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/editRutaNueva"
-        android:layout_marginTop="47dp"
-        android:text="Añadir rutas"/>
-
     <Button
         android:id="@+id/btnEnCabeza"
 
@@ -60,9 +42,8 @@
         android:text="En cabeza"
         android:textColor="#000000"
         android:textSize="30sp"
-        android:layout_below="@+id/btnAnyadirRutas"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@+id/editText"/>
+        android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

@@ -8,10 +8,7 @@ import android.util.Log;
 
 import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
 
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by wizord on 14/05/16.

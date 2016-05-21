@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,6 +34,7 @@ public class Mapa
         this.activity = activity;
 
         GPS gpsActual = new GPS(context);
+        Log.i("MAPAAA", "Mapa: "+gpsActual.getCoordenadas());
         LatLng latLng = new LatLng(gpsActual.getCoordenadas().getLatitud(), gpsActual.getCoordenadas().getLongitud());
         inicializarMapa(latLng);
     }

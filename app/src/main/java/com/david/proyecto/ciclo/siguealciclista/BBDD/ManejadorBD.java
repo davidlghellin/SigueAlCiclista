@@ -141,6 +141,23 @@ public class ManejadorBD extends SQLiteOpenHelper
         }
     }
 
+    public ArrayList<PuntoMapa> getPuntoMapaSinRepetir(SQLiteDatabase db)
+    {
+        ArrayList<PuntoMapa> datos = getDatos(db);
+        ArrayList<PuntoMapa> datosReturn = new ArrayList<>();
+
+        PuntoMapa aux = new PuntoMapa(new Coordenadas(0.f, 0.f));
+        for (PuntoMapa p : datos)
+        {
+            if (p.distintos(aux))
+            {
+                datosReturn.add(p);
+                aux.setCoordenadas(p.getCoordenadas());
+            }
+        }
+        return datosReturn;
+    }
+
     public void verDatos(SQLiteDatabase db)
     {
 

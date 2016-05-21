@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 public class ActivitySeguidor extends AppCompatActivity
 {
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

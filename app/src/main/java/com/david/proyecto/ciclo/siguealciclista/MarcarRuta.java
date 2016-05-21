@@ -23,21 +23,21 @@ public class MarcarRuta implements Runnable
     private boolean continuaHilo = true;
     private ConectarFirebase conectarFirebase;
     private Context context;
-    private String nombreUsuario;
+    //private String nombreUsuario;
 
     //bbdd
     private SQLiteDatabase db;
-    private SharedPreferences prefs;
-    ManejadorBD usdbh;
-    Mapa mapa;
+    //private SharedPreferences prefs;
+    private ManejadorBD usdbh;
+    //private Mapa mapa;
 
     public MarcarRuta(Context context)
     {
         this.context = context;
         this.gps = new GPS(context);
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        nombreUsuario = prefs.getString("user", "user" + (int) (Math.random() * 1000));
-        conectarFirebase = new ConectarFirebase(context, prefs.getString("ruta", "rutaPorDefecto"));
+        //prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        //conectarFirebase = new ConectarFirebase(context, prefs.getString("ruta", "rutaPorDefecto"));
+        conectarFirebase = new ConectarFirebase(context);
 
         //BBDD
         usdbh = new ManejadorBD(context, "SigueAlCiclista", null, UtilsBBDD.versionSQL());
@@ -67,7 +67,7 @@ public class MarcarRuta implements Runnable
                 UtilsBBDD.insertSQL(db,
                         new PuntoMapa(fechaHelper.converterFecha(new Date()), preferencias.getRuta(context), preferencias.getUsuario(context), gps.getCoordenadas()));
                 conectarFirebase.subirDatos(gps.getCoordenadas(), new Date());
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             } catch (InterruptedException e)
             {
                 e.printStackTrace();

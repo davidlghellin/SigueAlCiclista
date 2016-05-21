@@ -1,5 +1,6 @@
 package com.david.proyecto.ciclo.siguealciclista;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -9,9 +10,12 @@ import android.os.Bundle;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
+import com.david.proyecto.ciclo.siguealciclista.helpers.GetContext;
+import com.david.proyecto.ciclo.siguealciclista.servicios.MarcarRutaService;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -42,8 +46,11 @@ public class ActivityEnCabeza extends AppCompatActivity
         //comenzarLocalizacion();
         gpsActual = new GPS(getApplicationContext());
         marcarRuta = new MarcarRuta(this);
-        hilo = new Thread(marcarRuta);
-        hilo.start();
+       // hilo = new Thread(marcarRuta);
+        //hilo.start();
+        Intent intent=new Intent(getApplicationContext(),MarcarRutaService.class);
+        GetContext.setContext(getApplicationContext());
+        startService(intent);
 
         //mapa
         final LatLng latLng = new LatLng(gpsActual.getCoordenadas().getLatitud(), gpsActual.getCoordenadas().getLongitud());
@@ -143,6 +150,7 @@ public class ActivityEnCabeza extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
+        marcarRuta.setContinuaHilo(true);
         //TODO probar a poner el onCreate en un método e incluirlo aquí
     }
 }

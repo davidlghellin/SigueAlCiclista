@@ -53,6 +53,10 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.relativeLayoutPrincipal).setBackgroundColor(Color.BLUE);
         // findViewById(R.id.relativeLayoutPrincipal).setBackground(getResources().getDrawable(R.drawable.boton_cuircular));
 
+        //GPS gps= new GPS(getApplicationContext());
+        //text.setText(gps.getCoordenadas().toString());
+
+
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         //myFirebaseRef = new Firebase(FIREBASE_URL).child(FIREBASE_COORDENADAS);

@@ -1,6 +1,7 @@
 package com.david.proyecto.ciclo.siguealciclista;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -24,6 +25,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
 
+    ArrayList<PuntoMapa> datosUnicos;
 
     public static final LatLng ALQUERIAS = new LatLng(38.014215, -1.035408);
 
@@ -37,9 +39,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        pintarRuta();
-    }
 
+    }
 
 
     @Override
@@ -48,7 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         GPS gps = new GPS(getApplicationContext());
-        LatLng latLng=new LatLng(gps.getCoordenadas().getLatitud(), gps.getCoordenadas().getLongitud());
+        LatLng latLng = new LatLng(gps.getCoordenadas().getLatitud(), gps.getCoordenadas().getLongitud());
         // Add a marker in Sydney and move the camera
         mMap.addMarker(new MarkerOptions().position(ALQUERIAS).title("Alqerías"));
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(ALQUERIAS));
@@ -61,7 +62,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                 .build();                   // Creates a CameraPosition from the builder
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
+        //gdrawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.RED));
+        pintarRuta();
+
     }
+
     /**
      * Método para pintar las líneas marcadas
      *
@@ -69,7 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     public void drawPolilyne(PolylineOptions options)
     {
-        Polyline polyline = mMap.addPolyline(options);
+        mMap.addPolyline(options);
     }
 
 
@@ -77,9 +84,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     {
         ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, UtilsBBDD.versionSQL());
         SQLiteDatabase db = usdbh.getWritableDatabase();
-        usdbh.verDatos(db);
-        ArrayList<PuntoMapa> datos=usdbh.getDatos(db);
-        usdbh.verDatosSinRepetir(db);
+        //  usdbh.verDatos(db);
+        //  ArrayList<PuntoMapa> datos = usdbh.getDatos(db);
+        //  usdbh.verDatosSinRepetir(db);
 
+        datosUnicos = usdbh.getPuntoMapaSinRepetir(db);
+        for (int i = 0; i < datosUnicos.size() - 2; i++)
+        {
+            LatLng l1 = new LatLng(datosUnicos.get(i).getCoordenadas().getLatitud(), datosUnicos.get(i).getCoordenadas().getLongitud());
+            LatLng l2 = new LatLng(datosUnicos.get(i + 1).getCoordenadas().getLatitud(), datosUnicos.get(i + 1).getCoordenadas().getLongitud());
+            drawPolilyne(new PolylineOptions().add(l1).add(l2));
+        }
     }
 }

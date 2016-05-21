@@ -26,13 +26,20 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityEnCabeza"
-                  android:launchMode = "singleInstance"/>
+        <activity
+            android:name=".ActivityEnCabeza"
+            android:launchMode="singleInstance"/>
         <activity android:name=".preferencias.MisFragmentPreferencias"/>
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"/>
         <activity android:name=".ActivitySeguidor"/>
+
+        <service
+            android:name=".servicios.MarcarRutaService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>

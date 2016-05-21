@@ -35,6 +35,8 @@ public class GPS
         this.context = context;
         coordenadas = new Coordenadas();
         comenzarLocalizacion();
+        Log.i("MAPAAA", "coordenadas: "+coordenadas);
+
     }
 
     public Coordenadas getCoordenadas()

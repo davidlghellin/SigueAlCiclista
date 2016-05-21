@@ -65,25 +65,34 @@ public class MiValueEventListener implements ValueEventListener
             Log.i("CAMBIOSSS", "onDataChange: " + snapshot);
             Log.i("CAMBIOSSS", "onDataChange: " + snapshot.getKey());
             Log.i("CAMBIOSSS", "onDataChange: " + snapshot.getChildrenCount());
-
-
-            //TODO cuadno se produzca el cambio hay q buscar ese valor en la raiz de la ruta
-            //necesito la fecha para poner el valor en la linea de abajo y así obtener los datos
-            Firebase f = new Firebase(FIREBASE_URL + "/" + preferencias.getRuta(activity.getApplicationContext()) + "/19-05-2016 23:38:15");
-            f.addValueEventListener(new ValueEventListener()
+            Log.i("CAMBIOSSS", "onDataChangeruta: " + snapshot.getValue());
+            String fechaCambios = (String) snapshot.getValue();
+            if (fechaCambios != null)
             {
-                @Override
-                public void onDataChange(DataSnapshot snapshot)
+                //TODO cuadno se produzca el cambio hay q buscar ese valor en la raiz de la ruta
+                //necesito la fecha para poner el valor en la linea de abajo y así obtener los datos
+                //Firebase f = new Firebase(FIREBASE_URL + "/" + preferencias.getRuta(activity.getApplicationContext()) + "/19-05-2016 23:38:15");
+                Firebase f = new Firebase(FIREBASE_URL + "/" + preferencias.getRuta(activity.getApplicationContext()) + "/" + fechaCambios);
+                f.addValueEventListener(new ValueEventListener()
                 {
-                    Toast.makeText(activity.getApplicationContext(), snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
-                }
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot)
+                    {
+                        try
+                        {
+                            Toast.makeText(activity.getApplicationContext(), snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
+                            //TODO aqui meteriamos en la BBDD
+                        }catch (Exception e)
+                        {
+                        }
+                    }
 
-                @Override
-                public void onCancelled(FirebaseError error)
-                {
-                }
-            });
-
+                    @Override
+                    public void onCancelled(FirebaseError error)
+                    {
+                    }
+                });
+            }
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } catch (Exception e)
         {

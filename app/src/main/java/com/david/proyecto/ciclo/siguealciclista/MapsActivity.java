@@ -57,7 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 //.target(ALQUERIAS)      // Sets the center of the map to LatLng (refer to previous snippet)
                 .target(latLng)
-                .zoom(17)                   // Sets the zoom
+                //.zoom(17)                   // Sets the zoom
                 .bearing(90)                // Sets the orientation of the camera to east
                 .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                 .build();                   // Creates a CameraPosition from the builder

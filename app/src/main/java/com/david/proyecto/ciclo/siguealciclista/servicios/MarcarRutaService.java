@@ -27,10 +27,8 @@ public class MarcarRutaService extends IntentService
     private GPS gps;
     private boolean continuaHilo = true;
 
-
-    //bbdd
-    private SQLiteDatabase db;
     private ManejadorBD usdbh;
+    private SQLiteDatabase db;
     MarcarRuta marcarRuta;
 
     private ConectarFirebase conectarFirebase;
@@ -54,7 +52,8 @@ public class MarcarRutaService extends IntentService
         Context context = GetContext.getContext();
         this.gps = new GPS(context);
         conectarFirebase = new ConectarFirebase(context);
-
+        usdbh = new ManejadorBD(this, "SigueAlCiclista", null, UtilsBBDD.versionSQL());
+        db = usdbh.getWritableDatabase();
 
         //no hace falta usar el marcaar ruta lo haremos aquí
         //marcarRuta = new MarcarRuta(context);
@@ -63,10 +62,11 @@ public class MarcarRutaService extends IntentService
         while (true)
         {
             SystemClock.sleep(3000);
-            gps.guardarLogCoordenadas();
+            Date fecha = new Date();
+            gps.actualizarCoordenadas();
             UtilsBBDD.insertSQL(db,
-                    new PuntoMapa(fechaHelper.converterFecha(new Date()), preferencias.getRuta(context), preferencias.getUsuario(context), gps.getCoordenadas()));
-            conectarFirebase.subirDatos(gps.getCoordenadas(), new Date());
+                    new PuntoMapa(fechaHelper.converterFecha(fecha), preferencias.getRuta(context), preferencias.getUsuario(context), gps.getCoordenadas()));
+            conectarFirebase.subirDatos(gps.getCoordenadas(), fecha);
         }
     }
 

@@ -66,7 +66,16 @@ public class ConectarFirebase
             myFireNombreRuta.child(textoRuta).child(strfecha).child("User").setValue(nombreUsuario);
         }
     }
-
+    public void subirDatos(Coordenadas coordenadas, String fecha)
+    {
+        if (coordenadas != null)
+        {
+            myFireNombreRuta.child(textoRuta).child("Actual").setValue(fecha);
+            myFireNombreRuta.child(textoRuta).child(fecha).child("Longitud").setValue(coordenadas.getLongitud());
+            myFireNombreRuta.child(textoRuta).child(fecha).child("Latitud").setValue(coordenadas.getLatitud());
+            myFireNombreRuta.child(textoRuta).child(fecha).child("User").setValue(nombreUsuario);
+        }
+    }
     public void subirDatos()
     {
         Coordenadas coordenadas = new Coordenadas();

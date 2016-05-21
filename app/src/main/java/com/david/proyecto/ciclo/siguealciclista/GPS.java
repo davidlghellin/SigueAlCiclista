@@ -28,6 +28,7 @@ public class GPS
 
     /**
      * Constructor pasando el contexto de la actividad
+     *
      * @param context
      */
     public GPS(Context context)
@@ -35,8 +36,7 @@ public class GPS
         this.context = context;
         coordenadas = new Coordenadas();
         comenzarLocalizacion();
-        Log.i("MAPAAA", "coordenadas: "+coordenadas);
-
+        Log.i("GPS", "Constructor GPS: " + coordenadas);
     }
 
     public Coordenadas getCoordenadas()
@@ -115,12 +115,16 @@ public class GPS
 
     public void guardarLogCoordenadas()
     {
+        Log.i("GPS", "Las coordenadas son:" + coordenadas.toString());
+    }
+
+    public void actualizarCoordenadas()
+    {
         if (loc != null)
         {
             coordenadas.setLatitud(Float.parseFloat(String.valueOf(loc.getLatitude())));
             coordenadas.setLongitud(Float.parseFloat(String.valueOf(loc.getLongitude())));
-            Log.i("Las coordenadas son: ", coordenadas.toString());
+            guardarLogCoordenadas();
         }
     }
-
 }

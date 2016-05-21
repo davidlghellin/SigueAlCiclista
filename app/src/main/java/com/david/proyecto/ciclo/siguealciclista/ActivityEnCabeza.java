@@ -57,8 +57,8 @@ public class ActivityEnCabeza extends AppCompatActivity
         // inicializarMapa(latLng);
 
         mapa = new Mapa(getApplicationContext(), this);
-        mapa.setMarker(ALQUERIAS, "Alquerías", " Murcia");
-        mapa.setMarker(new LatLng(38.014215, -1.036), "PTO2", " Murcssssssia");
+        //mapa.setMarker(ALQUERIAS, "Alquerías", " Murcia");
+        //mapa.setMarker(new LatLng(38.014215, -1.036), "PTO2", " Murcssssssia");
 
         final ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, UtilsBBDD.versionSQL());
         final SQLiteDatabase db = usdbh.getWritableDatabase();

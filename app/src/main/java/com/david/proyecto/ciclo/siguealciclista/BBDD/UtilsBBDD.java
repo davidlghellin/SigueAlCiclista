@@ -42,11 +42,13 @@ public class UtilsBBDD
             Log.i("BBDD","Añadimos registro a BBDD");
         } catch (Exception e)
         {
-            Log.e("BBDD","Error al añadir registro a BBDD");
+            Log.e("BBDD","Error al añadir registro a BBDD"+db);
             return false;
         }
         return true;
     }
+
+
 
     /**
      * método para borrar/limpiar los datos de la base de datos

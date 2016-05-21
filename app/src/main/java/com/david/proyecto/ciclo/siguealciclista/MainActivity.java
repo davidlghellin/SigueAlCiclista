@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
@@ -21,7 +21,6 @@ import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
 import com.david.proyecto.ciclo.siguealciclista.preferencias.MisFragmentPreferencias;
 import com.firebase.client.Firebase;
 
-import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,8 +30,8 @@ public class MainActivity extends AppCompatActivity
 {
     private String FIREBASE_URL = "https://sigue-al-ciclista.firebaseio.com/";
 
-    @Bind(R.id.editText)
-    EditText text;
+    @Bind(R.id.textView)
+    TextView text;
     @Bind(R.id.button)
     Button button;
     @Bind(R.id.btnEnCabeza)
@@ -53,8 +52,8 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.relativeLayoutPrincipal).setBackgroundColor(Color.BLUE);
         // findViewById(R.id.relativeLayoutPrincipal).setBackground(getResources().getDrawable(R.drawable.boton_cuircular));
 
-        //GPS gps= new GPS(getApplicationContext());
-        //text.setText(gps.getCoordenadas().toString());
+        GPS gps= new GPS(getApplicationContext());
+        text.setText(gps.getCoordenadas().toString());
 
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

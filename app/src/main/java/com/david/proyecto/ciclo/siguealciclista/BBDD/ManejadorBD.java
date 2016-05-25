@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
+import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
 
 import java.util.ArrayList;
 
@@ -15,34 +16,55 @@ import java.util.ArrayList;
  */
 public class ManejadorBD extends SQLiteOpenHelper
 {
+    private Context context;
+
     // Constructor obligatorio
     public ManejadorBD(Context context, String name, SQLiteDatabase.CursorFactory factory, int version)
     {
         super(context, name, factory, version);
+        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        Log.i("BBDD", "La base de datos se ha creado");
-        db.execSQL(bbdd());
+        try
+        {
+            db.execSQL(bbdd());
+            Log.i("ManejadorBD", "La base de datos se ha creado [ManejadorBD.onCreate]");
+        } catch (Exception e)
+        {
+            Log.e("ManejadorBD", "Error en [ManejadorBD.onCreate]");
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        Log.i("BBDD", "La base de datos se ha actualizado");
-        //Se elimina la versión anterior de la tabla
-        db.execSQL("DROP TABLE IF EXISTS PuntoMapa;");
-        //Se crea la nueva versión de la tabla
-        db.execSQL(bbdd());
+        try
+        {
+            //Se elimina la versión anterior de la tabla
+            db.execSQL("DROP TABLE IF EXISTS PuntoMapa;");
+            //Se crea la nueva versión de la tabla
+            db.execSQL(bbdd());
+            Log.i("BBDD", "La base de datos se ha actualizado [ManejadorBD.onUpgrade]");
+        } catch (Exception e)
+        {
+            Log.e("ManejadorBD", "Error en [ManejadorBD.onUpgrade]");
+        }
     }
 
     public void borrarBBDD(SQLiteDatabase db)
     {
-        Log.i("BBDD", "La base de datos se ha borrado");
-        db.execSQL("DROP TABLE IF EXISTS PuntoMapa;");
-        db.execSQL(bbdd());
+        try
+        {
+            db.execSQL("DROP TABLE IF EXISTS PuntoMapa;");
+            db.execSQL(bbdd());
+            Log.i("ManejadorBD", "La base de datos se ha borrado [ManejadorBD.borrarBBDD]");
+        } catch (Exception e)
+        {
+            Log.i("ManejadorBD", "Error en [ManejadorBD.borrarBBDD]");
+        }
     }
 
 
@@ -65,29 +87,65 @@ public class ManejadorBD extends SQLiteOpenHelper
     public ArrayList<PuntoMapa> getDatos(SQLiteDatabase db)
     {
         ArrayList<PuntoMapa> datos = new ArrayList<>();
-        System.out.println("DATOSSSS");
-        Cursor c = db.rawQuery("SELECT * FROM PuntoMapa", null);
-        if (c.moveToFirst())
+        try
         {
-            do
+            Cursor c = db.rawQuery("SELECT * FROM PuntoMapa", null);
+            if (c.moveToFirst())
             {
-                int i = 0;
-                PuntoMapa punto = new PuntoMapa();
-                punto.setFecha(c.getString(i++));
-                punto.setRuta(c.getString(i++));
-                punto.setUser(c.getString(i++));
-                punto.setCoordenadas(c.getFloat(i++), c.getFloat(i++));
+                do
+                {
+                    int i = 0;
+                    PuntoMapa punto = new PuntoMapa();
+                    punto.setFecha(c.getString(i++));
+                    punto.setRuta(c.getString(i++));
+                    punto.setUser(c.getString(i++));
+                    punto.setCoordenadas(c.getFloat(i++), c.getFloat(i++));
 
-                datos.add(punto);
-            } while (c.moveToNext());
+                    datos.add(punto);
+                } while (c.moveToNext());
+            }
+            Log.i("ManejadorBD", "Obtenemos datos [ManejadorBD.getDatos]");
+        } catch (Exception e)
+        {
+            Log.e("ManejadorBD", "Error en [ManejadorBD.getDatos]");
         }
+        return datos;
+    }
+
+    public ArrayList<PuntoMapa> getDatosRuta(SQLiteDatabase db)
+    {
+        ArrayList<PuntoMapa> datos = new ArrayList<>();
+        try
+        {
+            Cursor c = db.rawQuery("SELECT * FROM PuntoMapa WHERE ruta= '" + context + "'", null);
+            if (c.moveToFirst())
+            {
+                do
+                {
+                    int i = 0;
+                    PuntoMapa punto = new PuntoMapa();
+                    punto.setFecha(c.getString(i++));
+                    punto.setRuta(c.getString(i++));
+                    punto.setUser(c.getString(i++));
+                    punto.setCoordenadas(c.getFloat(i++), c.getFloat(i++));
+
+                    datos.add(punto);
+                } while (c.moveToNext());
+            }
+            Log.i("ManejadorBD", "Obtenemos datos [ManejadorBD.getDatosRuta]");
+        } catch (Exception e)
+        {
+            Log.e("ManejadorBD", "Error en [ManejadorBD.getDatosRuta]");
+        }
+
         return datos;
     }
 
     private boolean comprobarCoordenada(SQLiteDatabase db, PuntoMapa puntoMapa)
     {
-        Cursor c = db.rawQuery("SELECT * FROM PuntoMapa " +
-                "WHERE longitud = \"" + puntoMapa.getCoordenadas().getLongitud() + "\" " +
+        Cursor c = db.rawQuery("SELECT * FROM PuntoMapa WHERE " +
+                "ruta = \"" + puntoMapa.getRuta() + "\" " +
+                "AND longitud = \"" + puntoMapa.getCoordenadas().getLongitud() + "\" " +
                 "AND latitud = \"" + puntoMapa.getCoordenadas().getLatitud() + "\"", null);
         if (c.getCount() <= 0)
             return false;
@@ -104,10 +162,10 @@ public class ManejadorBD extends SQLiteOpenHelper
             try
             {
                 insertarPuntoMapa(db, p);
-                Log.i("BBDD", "Añadimos registro a BBDD");
+                Log.i("ManejadorBD", "Añadimos registro a BBDD [ManejadorBD.insertarCoordenada]");
             } catch (Exception e)
             {
-                Log.e("BBDD", "Error al añadir registro a BBDD");
+                Log.e("ManejadorBD", "Error en [ManejadorBD.insertarCoordenada]");
                 return false;
             }
             return true;
@@ -117,14 +175,21 @@ public class ManejadorBD extends SQLiteOpenHelper
 
     private void insertarPuntoMapa(SQLiteDatabase db, PuntoMapa p)
     {
-        db.execSQL("INSERT INTO PuntoMapa " +
-                " (fecha,ruta,user,longitud,latitud)" +
-                " VALUES ('" + p.getFecha() + "','" +
-                p.getRuta() + "','" +
-                p.getUser() + "','" +
-                p.getCoordenadas().getLongitud() + "','" +
-                p.getCoordenadas().getLatitud() +
-                "');");
+        try
+        {
+            db.execSQL("INSERT INTO PuntoMapa " +
+                    " (fecha,ruta,user,longitud,latitud)" +
+                    " VALUES ('" + p.getFecha() + "','" +
+                    p.getRuta() + "','" +
+                    p.getUser() + "','" +
+                    p.getCoordenadas().getLongitud() + "','" +
+                    p.getCoordenadas().getLatitud() +
+                    "');");
+            Log.i("ManejadorBD", "Añadimos registro a BBDD [ManejadorBD.insertarPuntoMapa]");
+        } catch (Exception e)
+        {
+            Log.e("ManejadorBD", "Error en [ManejadorBD.insertarPuntoMapa]");
+        }
     }
 
     public void verDatosSinRepetir(SQLiteDatabase db)
@@ -135,7 +200,6 @@ public class ManejadorBD extends SQLiteOpenHelper
         {
             if (p.distintos(aux))
             {
-                System.out.println(p + "ddddd");
                 aux.setCoordenadas(p.getCoordenadas());
             }
         }
@@ -160,7 +224,6 @@ public class ManejadorBD extends SQLiteOpenHelper
 
     public void verDatos(SQLiteDatabase db)
     {
-
         ArrayList<PuntoMapa> datos = getDatos(db);
         for (PuntoMapa p : datos)
         {

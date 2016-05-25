@@ -43,6 +43,7 @@ public class ConectarFirebase
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         nombreUsuario = preferencias.getUsuario(context);
     }
+
     public ConectarFirebase(Context context)
     {
         //TODO rutaBBDD de properties
@@ -66,6 +67,7 @@ public class ConectarFirebase
             myFireNombreRuta.child(textoRuta).child(strfecha).child("User").setValue(nombreUsuario);
         }
     }
+
     public void subirDatos(Coordenadas coordenadas, String fecha)
     {
         if (coordenadas != null)
@@ -76,11 +78,17 @@ public class ConectarFirebase
             myFireNombreRuta.child(textoRuta).child(fecha).child("User").setValue(nombreUsuario);
         }
     }
+
     public void subirDatos()
     {
-        Coordenadas coordenadas = new Coordenadas();
+        GPS gps = new GPS(context);
+        Coordenadas coordenadas = gps.getCoordenadas();
         subirDatos(coordenadas, new Date());
     }
+
+    /**
+     * Método que crea en Firebase la Key = "Actual" con valor la fecha y hora con el siguiente formato "dd-MM-yyyy HH:mm:SS"
+     */
     public void crearActual()
     {
         myFireNombreRuta.child(textoRuta).child("Actual").setValue(fechaHelper.converterFecha(new Date()));

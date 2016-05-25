@@ -129,13 +129,13 @@ public class MainActivity extends AppCompatActivity
         {
             try
             {
-                Log.i("Listener", "Actualizamos datos en actualizarRutaAct");
+                Log.i(getApplicationContext().getClassLoader().toString(), "Actualizamos datos en actualizarRutaAct");
                 myFirebaseRef.addValueEventListener(new MiValueEventListener(MainActivity.this, FIREBASE_URL, notificationManager));
                 ok = true;
             } catch (Exception e)
             {
                 ok = false;
-                Log.e("Listener", "Error en actualizarRutaAct");
+                Log.e(getClassLoader().toString(), "Error en [MainActivity.actualizarRutaAct]");
             } finally
             {
                 i++;

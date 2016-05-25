@@ -64,6 +64,6 @@ public class Coordenadas
     @Override
     public String toString()
     {
-        return "Coordenadas{" + "longitud=" + longitud + ", latitud=" + latitud + '}';
+        return "Coordenadas{" + "latitud=" + latitud + ", longitud=" + longitud + '}';
     }
 }

@@ -39,11 +39,19 @@ public class GPS
         Log.i("GPS", "Constructor GPS: " + coordenadas);
     }
 
+    /**
+     * Método que devuelve las coordenadas actualizadas
+     * @return Las coordenadas actualizadas
+     */
     public Coordenadas getCoordenadas()
     {
+        actualizarCoordenadas();
         return coordenadas;
     }
 
+    /**
+     * Método que inicializa y prepara lo necesario para usar el GPS
+     */
     private void comenzarLocalizacion()
     {
         //Obtenemos una referencia al LocationManager
@@ -113,11 +121,17 @@ public class GPS
         //locManager.requestLocationUpdates(provedor, 2000, 0, locListener);
     }
 
-    public void guardarLogCoordenadas()
+    /**
+     * Guarda las coordenadas en el log
+     */
+    private void guardarLogCoordenadas()
     {
         Log.i("GPS", "Las coordenadas son:" + coordenadas.toString());
     }
 
+    /**
+     * Actualiza las coordenadas
+     */
     public void actualizarCoordenadas()
     {
         if (loc != null)

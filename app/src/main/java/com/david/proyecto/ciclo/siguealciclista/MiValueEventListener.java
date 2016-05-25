@@ -20,7 +20,7 @@ public class MiValueEventListener implements ValueEventListener
     private final String FIREBASE_URL;
     private Activity activity;
     private NotificationManager notificationManager;
-    DatosFirebase datosFirebase;
+    private DatosFirebase datosFirebase;
 
     public MiValueEventListener(Activity activity)
     {
@@ -32,7 +32,6 @@ public class MiValueEventListener implements ValueEventListener
     {
         this.FIREBASE_URL = FIREBASE_URL;
         this.notificationManager = notificationManager;
-        FIREBASE_URL = "https://sigue-al-ciclista.firebaseio.com/";
     }
 
     public MiValueEventListener(Activity activity, String FIREBASE_URL)
@@ -57,8 +56,8 @@ public class MiValueEventListener implements ValueEventListener
             fechaEnQueCambia = snapshot.getValue().toString();
 
             //Toast.makeText(activity, fechaEnQueCambia, Toast.LENGTH_SHORT).show();
-            Log.e(activity.getLocalClassName(), "se produce cambio " + fechaEnQueCambia);
-            System.out.println(fechaEnQueCambia);
+            Log.i(activity.getLocalClassName(), "se produce cambio " + fechaEnQueCambia);
+
             //notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(activity.getApplicationContext(), fechaEnQueCambia, "2"));
             System.out.println("ruta total " + new Firebase(FIREBASE_URL).child(snapshot.getValue().toString()));
 
@@ -69,9 +68,8 @@ public class MiValueEventListener implements ValueEventListener
             String fechaCambios = (String) snapshot.getValue();
             if (fechaCambios != null)
             {
-                //TODO cuadno se produzca el cambio hay q buscar ese valor en la raiz de la ruta
+                //TODO cuando se produzca el cambio hay q buscar ese valor en la raiz de la ruta
                 //necesito la fecha para poner el valor en la linea de abajo y así obtener los datos
-                //Firebase f = new Firebase(FIREBASE_URL + "/" + preferencias.getRuta(activity.getApplicationContext()) + "/19-05-2016 23:38:15");
                 Firebase f = new Firebase(FIREBASE_URL + "/" + preferencias.getRuta(activity.getApplicationContext()) + "/" + fechaCambios);
                 f.addValueEventListener(new ValueEventListener()
                 {
@@ -82,40 +80,28 @@ public class MiValueEventListener implements ValueEventListener
                         {
                             Toast.makeText(activity.getApplicationContext(), snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
                             //TODO aqui meteriamos en la BBDD
-                        }catch (Exception e)
+                        } catch (Exception e)
                         {
                         }
                     }
 
                     @Override
-                    public void onCancelled(FirebaseError error)
-                    {
-                    }
+                    public void onCancelled(FirebaseError error){}
                 });
             }
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } catch (Exception e)
         {
+            // Si falla, crearemos la rama para poder trabajar
+            Log.e(activity.getLocalClassName(), "Error en [MiValueEventListener.onDataChange].  Creamos la rama");
             new ConectarFirebase(activity.getApplicationContext(), preferencias.getRuta(activity.getApplicationContext()))
                     .crearActual();
         }
-//        Toast.makeText(activity, fechaEnQueCambia, Toast.LENGTH_SHORT).show();
-//        Log.e(activity.getLocalClassName(), "se produce cambio " + fechaEnQueCambia);
-//        System.out.println(fechaEnQueCambia);
-//        notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(activity.getApplicationContext(), fechaEnQueCambia, "2"));
-//        System.out.println("ruta total " + new Firebase(FIREBASE_URL).child(snapshot.getValue().toString()));
-////                System.out.println("query: "+new Firebase(FIREBASE_URL).child(FIREBASE_RUTA).);
-//
-////                DatosFirebase datosFirebase=snapshot.getValue(DatosFirebase.class);
-////                System.out.println(datosFirebase);
-////                System.out.println(datosFirebase.getUsuario()+"------");
-//
-//        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override
     public void onCancelled(FirebaseError firebaseError)
     {
-
+        Log.e(activity.getLocalClassName(), "Error en [MiValueEventListener.onCancelled]");
     }
 }

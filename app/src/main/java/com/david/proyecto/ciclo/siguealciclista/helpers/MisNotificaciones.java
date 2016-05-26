@@ -1,12 +1,15 @@
-package com.david.proyecto.ciclo.siguealciclista;
+package com.david.proyecto.ciclo.siguealciclista.helpers;
 
 import android.app.Notification;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.NotificationCompat;
 
+import com.david.proyecto.ciclo.siguealciclista.R;
+
 /**
- * Created by wizord on 11/05/16.
+ * David López González on 11/05/16.
+ * Proyecto ciclo DAM I.E.S Alquerías
  */
 public class MisNotificaciones
 {

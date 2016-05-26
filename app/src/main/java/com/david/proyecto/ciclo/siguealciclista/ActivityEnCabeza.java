@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Button;
 
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -25,7 +27,6 @@ public class ActivityEnCabeza extends AppCompatActivity
 {
     private Thread hilo;
     private MarcarRuta marcarRuta;
-
 
     //private GoogleMap mMap;
     //Barcelona   41°23′20″N  02°09′32″E  UT+02:00   Barcelona
@@ -119,7 +120,7 @@ public class ActivityEnCabeza extends AppCompatActivity
         }
 
         MyAsync my = new MyAsync();
-        my.execute();
+        //my.execute();
         //mapa.drawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.RED));
         //setMarker(ALQUERIAS, "Alquerías", " Murcia"); // Agregamos el marcador
         //setMarker(new LatLng(38.014215, -1.036), "PTO2", " Murcia"); // Agregamos el marcador
@@ -137,6 +138,11 @@ public class ActivityEnCabeza extends AppCompatActivity
 
         android.os.Process.killProcess(android.os.Process.myPid());
         finish();
+    }
+    @OnClick(R.id.btnGrabarPunto)
+    public void marcarPunto()
+    {
+        new ConectarFirebase(getApplicationContext()).subirDatos();
     }
 
     @Override

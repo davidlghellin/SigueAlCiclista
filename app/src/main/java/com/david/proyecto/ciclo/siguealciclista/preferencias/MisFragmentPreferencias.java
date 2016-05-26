@@ -7,7 +7,8 @@ import com.david.proyecto.ciclo.siguealciclista.R;
 import java.util.List;
 
 /**
- * Created by wizord on 8/05/16.
+ * Created by David López González on 8/05/16.
+ * Proyecto ciclo DAM I.E.S Alquerías
  */
 public class MisFragmentPreferencias extends PreferenceActivity
 {

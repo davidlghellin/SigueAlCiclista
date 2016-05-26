@@ -1,7 +1,8 @@
 package com.david.proyecto.ciclo.siguealciclista;
 
 /**
- * Created by wizord on 26/04/16.
+ * David López González on 26/04/16.
+ * Proyecto ciclo DAM I.E.S Alquerías
  */
 public class Coordenadas
 {
@@ -38,6 +39,12 @@ public class Coordenadas
         this.latitud = latitud;
     }
 
+
+    public boolean compararCoordenadas(Coordenadas coordenadas)
+    {
+        return this.getLatitud() == coordenadas.getLatitud() && this.getLongitud() == coordenadas.getLongitud();
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -48,9 +55,7 @@ public class Coordenadas
 
         if (Float.compare(that.longitud, longitud) != 0) return false;
         return Float.compare(that.latitud, latitud) == 0;
-
     }
-
 
 
     @Override

@@ -12,7 +12,8 @@ import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
 import java.util.ArrayList;
 
 /**
- * Created by wizord on 14/05/16.
+ * David López González on 14/05/16.
+ * Proyecto ciclo DAM I.E.S Alquerías
  */
 public class ManejadorBD extends SQLiteOpenHelper
 {
@@ -60,7 +61,7 @@ public class ManejadorBD extends SQLiteOpenHelper
         {
             db.execSQL("DROP TABLE IF EXISTS PuntoMapa;");
             db.execSQL(bbdd());
-            Log.i("ManejadorBD", "La base de datos se ha borrado [ManejadorBD.borrarBBDD]");
+            Log.i("ManejadorBD", "La tabla de la base de datos se ha borrado [ManejadorBD.borrarBBDD]");
         } catch (Exception e)
         {
             Log.i("ManejadorBD", "Error en [ManejadorBD.borrarBBDD]");
@@ -117,7 +118,7 @@ public class ManejadorBD extends SQLiteOpenHelper
         ArrayList<PuntoMapa> datos = new ArrayList<>();
         try
         {
-            Cursor c = db.rawQuery("SELECT * FROM PuntoMapa WHERE ruta= '" + context + "'", null);
+            Cursor c = db.rawQuery("SELECT * FROM PuntoMapa WHERE ruta= '" + preferencias.getRuta(context) + "'", null);
             if (c.moveToFirst())
             {
                 do
@@ -153,7 +154,7 @@ public class ManejadorBD extends SQLiteOpenHelper
         return true;
     }
 
-    public boolean insertarCoordenada(SQLiteDatabase db, PuntoMapa p)
+    public boolean insertarCoordenadaComprobandoBBDD(SQLiteDatabase db, PuntoMapa p)
     {
         if (!comprobarCoordenada(db, p))//no existe insertamos
         {
@@ -162,15 +163,31 @@ public class ManejadorBD extends SQLiteOpenHelper
             try
             {
                 insertarPuntoMapa(db, p);
-                Log.i("ManejadorBD", "Añadimos registro a BBDD [ManejadorBD.insertarCoordenada]");
+                Log.i("ManejadorBD", "Añadimos registro a BBDD [ManejadorBD.insertarCoordenadaComprobandoBBDD]");
             } catch (Exception e)
             {
-                Log.e("ManejadorBD", "Error en [ManejadorBD.insertarCoordenada]");
+                Log.e("ManejadorBD", "Error en [ManejadorBD.insertarCoordenadaComprobandoBBDD]");
                 return false;
             }
             return true;
         }
         return false;
+    }
+
+    public boolean insertarCoordenada(SQLiteDatabase db, PuntoMapa p)
+    {
+        if (p.getFecha() == null || p.getRuta() == null || p.getUser() == null)
+            return false;
+        try
+        {
+            insertarPuntoMapa(db, p);
+            Log.i("ManejadorBD", "BBDD [ManejadorBD.insertarCoordenada]");
+        } catch (Exception e)
+        {
+            Log.e("ManejadorBD", "Error en [ManejadorBD.insertarCoordenada]");
+            return false;
+        }
+        return true;
     }
 
     private void insertarPuntoMapa(SQLiteDatabase db, PuntoMapa p)
@@ -222,9 +239,40 @@ public class ManejadorBD extends SQLiteOpenHelper
         return datosReturn;
     }
 
+    public ArrayList<PuntoMapa> getPuntoMapaRutaSinRepetir(SQLiteDatabase db)
+    {
+        ArrayList<PuntoMapa> datos = getDatosRuta(db);
+        ArrayList<PuntoMapa> datosReturn = new ArrayList<>();
+
+        for (PuntoMapa p : datos)
+        {
+            datosReturn.add(p);
+        }
+        return datosReturn;
+    }
+
+    /**
+     * Método para ver en la consola todos los registros de la base de datos
+     *
+     * @param db Base de datos
+     */
     public void verDatos(SQLiteDatabase db)
     {
         ArrayList<PuntoMapa> datos = getDatos(db);
+        for (PuntoMapa p : datos)
+        {
+            System.out.println(p);
+        }
+    }
+
+    /**
+     * Método para ver en la consola los registros de la base de datos de la ruta configurada
+     *
+     * @param db Base de datos
+     */
+    public void verDatosRuta(SQLiteDatabase db)
+    {
+        ArrayList<PuntoMapa> datos = getDatosRuta(db);
         for (PuntoMapa p : datos)
         {
             System.out.println(p);

@@ -19,7 +19,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 /**
- * Created by wizord on 8/05/16.
+ * David López González on 8/05/16.
+ * Proyecto ciclo DAM I.E.S Alquerías
  */
 public class Mapa
 {

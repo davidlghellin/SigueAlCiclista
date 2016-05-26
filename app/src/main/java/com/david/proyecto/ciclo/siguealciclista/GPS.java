@@ -11,7 +11,8 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 /**
- * Created by wizord on 7/05/16.
+ * David López González on 7/05/16.
+ * Proyecto ciclo DAM I.E.S Alquerías
  */
 public class GPS
 {

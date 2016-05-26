@@ -4,7 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 /**
- * Created by wizord on 14/05/16.
+ * David López González on 14/05/16.
+ * Proyecto ciclo DAM I.E.S Alquerías
  */
 public class UtilsBBDD
 {

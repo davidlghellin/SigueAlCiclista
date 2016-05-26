@@ -2,18 +2,27 @@ package com.david.proyecto.ciclo.siguealciclista;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
+import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
+import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
+import com.david.proyecto.ciclo.siguealciclista.helpers.MisNotificaciones;
+import com.david.proyecto.ciclo.siguealciclista.helpers.fechaHelper;
 import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.Date;
+
 /**
- * Created by wizord on 14/05/16.
+ * David López González on 14/05/16.
+ * Proyecto ciclo DAM I.E.S Alquerías
  */
 public class MiValueEventListener implements ValueEventListener
 {
@@ -21,6 +30,8 @@ public class MiValueEventListener implements ValueEventListener
     private Activity activity;
     private NotificationManager notificationManager;
     private DatosFirebase datosFirebase;
+    private ManejadorBD usdbh;
+    private SQLiteDatabase db;
 
     public MiValueEventListener(Activity activity)
     {
@@ -45,6 +56,13 @@ public class MiValueEventListener implements ValueEventListener
         this.activity = activity;
         this.FIREBASE_URL = FIREBASE_URL;
         this.notificationManager = notificationManager;
+        constructorBBDD();
+    }
+
+    private void constructorBBDD()
+    {
+        usdbh = new ManejadorBD(activity.getApplicationContext(), "SigueAlCiclista", null, UtilsBBDD.versionSQL());
+        db = usdbh.getWritableDatabase();
     }
 
     @Override
@@ -65,7 +83,7 @@ public class MiValueEventListener implements ValueEventListener
             Log.i("CAMBIOSSS", "onDataChange: " + snapshot.getKey());
             Log.i("CAMBIOSSS", "onDataChange: " + snapshot.getChildrenCount());
             Log.i("CAMBIOSSS", "onDataChangeruta: " + snapshot.getValue());
-            String fechaCambios = (String) snapshot.getValue();
+            final String fechaCambios = (String) snapshot.getValue();
             if (fechaCambios != null)
             {
                 //TODO cuando se produzca el cambio hay q buscar ese valor en la raiz de la ruta
@@ -78,15 +96,25 @@ public class MiValueEventListener implements ValueEventListener
                     {
                         try
                         {
+                            float latiud = Float.parseFloat(snapshot.child("Latitud").getValue().toString());
+                            float longitud = Float.parseFloat(snapshot.child("Longitud").getValue().toString());
+                            String user = snapshot.child("User").getValue().toString();
                             Toast.makeText(activity.getApplicationContext(), snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
                             //TODO aqui meteriamos en la BBDD
+                            //UtilsBBDD.insertSQL(db, new PuntoMapa(fechaCambios, preferencias.getRuta(activity.getApplicationContext()), user, new Coordenadas(longitud, latiud)));
+                            usdbh.insertarCoordenada(db, new PuntoMapa(fechaCambios, preferencias.getRuta(activity.getApplicationContext()), user, new Coordenadas(longitud, latiud)));
+                            String critico = snapshot.child("Critico").getValue().toString();
+                            if (critico.equals("si"))
+                                notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(activity.getApplicationContext(), user, fechaCambios));
                         } catch (Exception e)
                         {
                         }
                     }
 
                     @Override
-                    public void onCancelled(FirebaseError error){}
+                    public void onCancelled(FirebaseError error)
+                    {
+                    }
                 });
             }
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

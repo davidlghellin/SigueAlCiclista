@@ -12,6 +12,7 @@ import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
 import com.david.proyecto.ciclo.siguealciclista.ConectarFirebase;
+import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
 import com.david.proyecto.ciclo.siguealciclista.GPS;
 import com.david.proyecto.ciclo.siguealciclista.MarcarRuta;
 import com.david.proyecto.ciclo.siguealciclista.helpers.GetContext;
@@ -29,13 +30,15 @@ public class MarcarRutaService extends IntentService
 
     private ManejadorBD usdbh;
     private SQLiteDatabase db;
-    MarcarRuta marcarRuta;
+    private Coordenadas coordenadasAux;
+    //MarcarRuta marcarRuta;
 
     private ConectarFirebase conectarFirebase;
 
     public MarcarRutaService() throws InterruptedException
     {
         super("MarcarRutaService");
+        coordenadasAux = new Coordenadas();
     }
 
     @Override
@@ -55,18 +58,21 @@ public class MarcarRutaService extends IntentService
         usdbh = new ManejadorBD(this, "SigueAlCiclista", null, UtilsBBDD.versionSQL());
         db = usdbh.getWritableDatabase();
 
-        //no hace falta usar el marcaar ruta lo haremos aquí
+        //no hace falta usar el marcar ruta lo haremos aquí
         //marcarRuta = new MarcarRuta(context);
         //hilo = new Thread(marcarRuta);
         // hilo.start();
         while (true)
         {
             SystemClock.sleep(3000);
-            Date fecha = new Date();
             gps.actualizarCoordenadas();
-            UtilsBBDD.insertSQL(db,
-                    new PuntoMapa(fechaHelper.converterFecha(fecha), preferencias.getRuta(context), preferencias.getUsuario(context), gps.getCoordenadas()));
-            conectarFirebase.subirDatos(gps.getCoordenadas(), fecha);
+            //TODO comprobar antes de subir
+            if (!coordenadasAux.compararCoordenadas(gps.getCoordenadas()))
+            {
+                // UtilsBBDD.insertSQL(db,new PuntoMapa(fechaHelper.converterFecha(new Date()), preferencias.getRuta(context), preferencias.getUsuario(context), gps.getCoordenadas()));
+                conectarFirebase.subirDatos(gps.getCoordenadas(), new Date());
+            }
+            coordenadasAux = gps.getCoordenadas();
         }
     }
 
@@ -74,6 +80,6 @@ public class MarcarRutaService extends IntentService
     public void onDestroy()
     {
         super.onDestroy();
-        marcarRuta.setContinuaHilo(false);
+        //marcarRuta.setContinuaHilo(false);
     }
 }

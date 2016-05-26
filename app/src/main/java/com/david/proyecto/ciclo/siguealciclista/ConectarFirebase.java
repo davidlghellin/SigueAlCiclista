@@ -11,7 +11,8 @@ import com.david.proyecto.ciclo.siguealciclista.helpers.fechaHelper;
 import java.util.Date;
 
 /**
- * Created by wizord on 8/05/16.
+ * David López González on 8/05/16.
+ * Proyecto ciclo DAM I.E.S Alquerías
  */
 public class ConectarFirebase
 {
@@ -56,6 +57,19 @@ public class ConectarFirebase
         textoRuta = preferencias.getRuta(context);
     }
 
+    public void subirDatosPunto(Coordenadas coordenadas)
+    {
+        String strfecha = fechaHelper.converterFecha(new Date());
+        if (coordenadas != null)
+        {
+            myFireNombreRuta.child(textoRuta).child("Actual").setValue(strfecha);
+            myFireNombreRuta.child(textoRuta).child(strfecha).child("Longitud").setValue(coordenadas.getLongitud());
+            myFireNombreRuta.child(textoRuta).child(strfecha).child("Latitud").setValue(coordenadas.getLatitud());
+            myFireNombreRuta.child(textoRuta).child(strfecha).child("User").setValue(nombreUsuario);
+            myFireNombreRuta.child(textoRuta).child(strfecha).child("Critico").setValue("si");
+        }
+    }
+
     public void subirDatos(Coordenadas coordenadas, Date fecha)
     {
         String strfecha = fechaHelper.converterFecha(fecha);
@@ -83,7 +97,7 @@ public class ConectarFirebase
     {
         GPS gps = new GPS(context);
         Coordenadas coordenadas = gps.getCoordenadas();
-        subirDatos(coordenadas, new Date());
+        subirDatosPunto(coordenadas);
     }
 
     /**

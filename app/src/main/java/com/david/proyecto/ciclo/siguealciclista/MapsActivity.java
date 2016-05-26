@@ -38,8 +38,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
     }
 
 
@@ -66,7 +64,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //gdrawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.RED));
         pintarRuta();
-
     }
 
     /**
@@ -87,13 +84,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //  usdbh.verDatos(db);
         //  ArrayList<PuntoMapa> datos = usdbh.getDatos(db);
         //  usdbh.verDatosSinRepetir(db);
-
-        datosUnicos = usdbh.getPuntoMapaSinRepetir(db);
+        //datosUnicos = usdbh.getPuntoMapaSinRepetir(db);
+        datosUnicos = usdbh.getPuntoMapaRutaSinRepetir(db);
+        if (datosUnicos.size() > 0)
+            mMap.addMarker(new MarkerOptions().position(new LatLng(datosUnicos.get(0).getCoordenadas().getLatitud(), datosUnicos.get(0).getCoordenadas().getLongitud())).title("Salida"));
         for (int i = 0; i < datosUnicos.size() - 2; i++)
         {
             LatLng l1 = new LatLng(datosUnicos.get(i).getCoordenadas().getLatitud(), datosUnicos.get(i).getCoordenadas().getLongitud());
             LatLng l2 = new LatLng(datosUnicos.get(i + 1).getCoordenadas().getLatitud(), datosUnicos.get(i + 1).getCoordenadas().getLongitud());
             drawPolilyne(new PolylineOptions().add(l1).add(l2));
+            System.out.println(datosUnicos.get(i) + " wwwww");
         }
     }
 }

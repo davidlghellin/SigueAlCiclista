@@ -15,7 +15,8 @@ import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
 import java.util.Date;
 
 /**
- * Created by wizord on 7/05/16.
+ * David López González on 7/05/16.
+ * Proyecto ciclo DAM I.E.S Alquerías
  */
 public class MarcarRuta implements Runnable
 {
@@ -62,7 +63,7 @@ public class MarcarRuta implements Runnable
         {
             try
             {
-                gps.guardarLogCoordenadas();
+                gps.actualizarCoordenadas();
                 System.out.println(gps.getCoordenadas());
                 UtilsBBDD.insertSQL(db,
                         new PuntoMapa(fechaHelper.converterFecha(new Date()), preferencias.getRuta(context), preferencias.getUsuario(context), gps.getCoordenadas()));

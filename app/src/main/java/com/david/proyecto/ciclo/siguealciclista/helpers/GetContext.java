@@ -3,7 +3,8 @@ package com.david.proyecto.ciclo.siguealciclista.helpers;
 import android.content.Context;
 
 /**
- * Created by wizord on 21/05/16.
+ * David López González on 21/05/16.
+ * Proyecto ciclo DAM I.E.S Alquerías
  */
 public class GetContext
 {

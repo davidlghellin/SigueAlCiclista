@@ -3,7 +3,8 @@ package com.david.proyecto.ciclo.siguealciclista;
 import java.util.Date;
 
 /**
- * Created by wizord on 7/05/16.
+ * David López González on 7/05/16.
+ * Proyecto ciclo DAM I.E.S Alquerías
  */
 public class LineaBBDD
 {

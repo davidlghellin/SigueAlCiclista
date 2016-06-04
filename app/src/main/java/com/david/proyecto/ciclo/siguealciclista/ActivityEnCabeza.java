@@ -6,20 +6,18 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Button;
 
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
+import com.david.proyecto.ciclo.siguealciclista.firebase.ConectarFirebase;
 import com.david.proyecto.ciclo.siguealciclista.helpers.GetContext;
 import com.david.proyecto.ciclo.siguealciclista.servicios.MarcarRutaService;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -106,7 +104,7 @@ public class ActivityEnCabeza extends AppCompatActivity
                 {
                     e.printStackTrace();
                 }
-                ArrayList<PuntoMapa> puntoMapas = usdbh.getDatos(db);
+                ArrayList<PuntoMapa> puntoMapas = usdbh.getDatosRuta(db);
                 return puntoMapas;
             }
 
@@ -115,7 +113,8 @@ public class ActivityEnCabeza extends AppCompatActivity
             {
                 super.onPostExecute(puntoMapas);
                 //TODO cuando ha terminado de cargar los datos
-                mapa2.drawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.RED));
+                mapa2.drawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.BLACK));
+
             }
         }
 
@@ -125,7 +124,6 @@ public class ActivityEnCabeza extends AppCompatActivity
         //setMarker(ALQUERIAS, "Alquerías", " Murcia"); // Agregamos el marcador
         //setMarker(new LatLng(38.014215, -1.036), "PTO2", " Murcia"); // Agregamos el marcador
         //setMarker(new LatLng(38.01422, -1.0365), "PTO3", " Murcia"); // Agregamos el marcador
-
     }
 
 

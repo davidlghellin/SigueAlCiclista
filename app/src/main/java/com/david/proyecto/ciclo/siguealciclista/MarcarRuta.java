@@ -2,15 +2,14 @@ package com.david.proyecto.ciclo.siguealciclista;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
-import android.preference.PreferenceManager;
 
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
-import com.david.proyecto.ciclo.siguealciclista.helpers.fechaHelper;
-import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
+import com.david.proyecto.ciclo.siguealciclista.firebase.ConectarFirebase;
+import com.david.proyecto.ciclo.siguealciclista.helpers.FechaHelper;
+import com.david.proyecto.ciclo.siguealciclista.helpers.Preferencias;
 
 import java.util.Date;
 
@@ -66,7 +65,7 @@ public class MarcarRuta implements Runnable
                 gps.actualizarCoordenadas();
                 System.out.println(gps.getCoordenadas());
                 UtilsBBDD.insertSQL(db,
-                        new PuntoMapa(fechaHelper.converterFecha(new Date()), preferencias.getRuta(context), preferencias.getUsuario(context), gps.getCoordenadas()));
+                        new PuntoMapa(FechaHelper.converterFecha(new Date()), Preferencias.getRuta(context), Preferencias.getUsuario(context), gps.getCoordenadas()));
                 conectarFirebase.subirDatos(gps.getCoordenadas(), new Date());
                 Thread.sleep(1000);
             } catch (InterruptedException e)

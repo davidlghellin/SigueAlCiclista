@@ -1,16 +1,13 @@
 package com.david.proyecto.ciclo.siguealciclista.servicios;
 
 import android.app.IntentService;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 
-import com.david.proyecto.ciclo.siguealciclista.ConectarFirebase;
+import com.david.proyecto.ciclo.siguealciclista.firebase.ConectarFirebase;
 import com.david.proyecto.ciclo.siguealciclista.GPS;
 import com.david.proyecto.ciclo.siguealciclista.helpers.GetContext;
-
-import java.util.Date;
 
 public class MarcarUsuariosService extends IntentService
 {
@@ -41,7 +38,7 @@ public class MarcarUsuariosService extends IntentService
             {
                 gps.actualizarCoordenadas();
                 conectarFirebase.subirPosicionUsuario(gps.getCoordenadas());
-                Thread.sleep(60000);    // a cada minuto subimos
+                Thread.sleep(10000);    // a cada minuto subimos
             } catch (InterruptedException e)
             {
                 e.printStackTrace();

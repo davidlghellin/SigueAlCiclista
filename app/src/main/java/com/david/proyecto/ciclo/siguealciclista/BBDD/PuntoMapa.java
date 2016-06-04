@@ -1,7 +1,7 @@
 package com.david.proyecto.ciclo.siguealciclista.BBDD;
 
 import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
-import com.david.proyecto.ciclo.siguealciclista.helpers.fechaHelper;
+import com.david.proyecto.ciclo.siguealciclista.helpers.FechaHelper;
 
 import java.util.Date;
 
@@ -41,7 +41,7 @@ public class PuntoMapa
 
     public void setFecha(Date strFecha)
     {
-        this.fecha = fechaHelper.converterFecha(strFecha);
+        this.fecha = FechaHelper.converterFecha(strFecha);
     }
 
     public void setFecha(String fecha)

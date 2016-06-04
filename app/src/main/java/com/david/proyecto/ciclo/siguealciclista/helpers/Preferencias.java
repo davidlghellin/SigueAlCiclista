@@ -4,14 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.android.gms.maps.GoogleMap;
+
 /**
  * David López González on 14/05/16.
  * Proyecto ciclo DAM I.E.S Alquerías
  */
-public class preferencias
+public class Preferencias
 {
     /**
      * Método que devuelve el nombre padre de la BBDD Firebase
+     *
      * @return Directorio padre de Firebase
      */
     public static String getNombreFirebase()
@@ -20,7 +23,7 @@ public class preferencias
     }
 
     /**
-     * Método que devuelve el nombre del usuario de la aplicación definidas en las preferencias
+     * Método que devuelve el nombre del usuario de la aplicación definidas en las Preferencias
      *
      * @param context Contexto de la actividad donde se hace la llamada
      * @return Nombre de usuario
@@ -29,11 +32,10 @@ public class preferencias
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString("user", "defecto_nombre");
-
     }
 
     /**
-     * Método que devuelve el nombre de la ruta, definidas en las preferencias
+     * Método que devuelve el nombre de la ruta, definidas en las Preferencias
      *
      * @param context Contexto de la actividad donde se hace la llamada
      * @return String de la ruta en Firebase
@@ -41,7 +43,19 @@ public class preferencias
     public static String getRuta(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString("ruta", "defecto_ruta");
+        return getGrupo(context) +" "+ prefs.getString("ruta", "defecto_ruta");
+    }
+
+    /**
+     * Método que devuelve el nombre del grupo de carrera, definidads en las Preferencias
+     *
+     * @param context
+     * @return
+     */
+    private static String getGrupo(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString("grupo", "grupo_ruta");
     }
 
     /**
@@ -52,6 +66,6 @@ public class preferencias
      */
     public static String getRutaActual(Context context)
     {
-        return getRuta(context) + "/Actual";
+        return  getRuta(context) + "/Actual";
     }
 }

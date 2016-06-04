@@ -1,12 +1,15 @@
-package com.david.proyecto.ciclo.siguealciclista;
+package com.david.proyecto.ciclo.siguealciclista.firebase;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
-import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
+import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
+import com.david.proyecto.ciclo.siguealciclista.GPS;
+import com.david.proyecto.ciclo.siguealciclista.helpers.Preferencias;
 import com.firebase.client.Firebase;
-import com.david.proyecto.ciclo.siguealciclista.helpers.fechaHelper;
+import com.david.proyecto.ciclo.siguealciclista.helpers.FechaHelper;
 
 import java.util.Date;
 
@@ -27,7 +30,7 @@ public class ConectarFirebase
 
 
     private String nombreUsuario;
-    private SharedPreferences prefs;
+    //private SharedPreferences prefs;
 
     /**
      * @param context
@@ -35,31 +38,33 @@ public class ConectarFirebase
      */
     public ConectarFirebase(Context context, String rutaBBDD)
     {
-        //TODO rutaBBDD de properties
         this.textoRuta = rutaBBDD;
         this.context = context;
         Firebase.setAndroidContext(context);
         myFireNombreRuta = new Firebase(FIREBASE_URL);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        nombreUsuario = preferencias.getUsuario(context);
+        //prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        nombreUsuario = Preferencias.getUsuario(context);
     }
 
+    /**
+     *
+     * @param context
+     */
     public ConectarFirebase(Context context)
     {
-        //TODO rutaBBDD de properties
+        this.textoRuta = Preferencias.getRuta(context);
         this.context = context;
         Firebase.setAndroidContext(context);
         myFireNombreRuta = new Firebase(FIREBASE_URL);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        nombreUsuario = preferencias.getUsuario(context);
-        textoRuta = preferencias.getRuta(context);
+        //prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        nombreUsuario = Preferencias.getUsuario(context);
     }
 
     public void subirDatosPunto(Coordenadas coordenadas)
     {
-        String strfecha = fechaHelper.converterFecha(new Date());
+        String strfecha = FechaHelper.converterFecha(new Date());
         if (coordenadas != null)
         {
             myFireNombreRuta.child(textoRuta).child("Actual").setValue(strfecha);
@@ -67,18 +72,34 @@ public class ConectarFirebase
             myFireNombreRuta.child(textoRuta).child(strfecha).child("Latitud").setValue(coordenadas.getLatitud());
             myFireNombreRuta.child(textoRuta).child(strfecha).child("User").setValue(nombreUsuario);
             myFireNombreRuta.child(textoRuta).child(strfecha).child("Critico").setValue("si");
+
+            Log.i("ConectarFirebase","[ConectarFirebase.subirDatosPunto]");
         }
     }
 
     public void subirDatos(Coordenadas coordenadas, Date fecha)
     {
-        String strfecha = fechaHelper.converterFecha(fecha);
+        String strfecha = FechaHelper.converterFecha(fecha);
         if (coordenadas != null)
         {
             myFireNombreRuta.child(textoRuta).child("Actual").setValue(strfecha);
             myFireNombreRuta.child(textoRuta).child(strfecha).child("Longitud").setValue(coordenadas.getLongitud());
             myFireNombreRuta.child(textoRuta).child(strfecha).child("Latitud").setValue(coordenadas.getLatitud());
             myFireNombreRuta.child(textoRuta).child(strfecha).child("User").setValue(nombreUsuario);
+
+            Log.i("ConectarFirebase","[ConectarFirebase.subirDatos]");
+        }
+    }
+
+    public void subirPosicionUsuario(Coordenadas coordenadas)
+    {
+        if (coordenadas != null)
+        {
+           // myFireNombreRuta.child(textoRuta).child("Usuarios").setValue(nombreUsuario);
+            myFireNombreRuta.child(textoRuta).child("Usuarios").child(nombreUsuario).child("Longitud").setValue(coordenadas.getLongitud());
+            myFireNombreRuta.child(textoRuta).child("Usuarios").child(nombreUsuario).child("Latitud").setValue(coordenadas.getLatitud());
+
+            Log.i("ConectarFirebase","[ConectarFirebase.subirPosicionUsuario]");
         }
     }
 
@@ -90,6 +111,8 @@ public class ConectarFirebase
             myFireNombreRuta.child(textoRuta).child(fecha).child("Longitud").setValue(coordenadas.getLongitud());
             myFireNombreRuta.child(textoRuta).child(fecha).child("Latitud").setValue(coordenadas.getLatitud());
             myFireNombreRuta.child(textoRuta).child(fecha).child("User").setValue(nombreUsuario);
+
+            Log.i("ConectarFirebase","[ConectarFirebase.subirDatos]");
         }
     }
 
@@ -105,6 +128,18 @@ public class ConectarFirebase
      */
     public void crearActual()
     {
-        myFireNombreRuta.child(textoRuta).child("Actual").setValue(fechaHelper.converterFecha(new Date()));
+        myFireNombreRuta.child(textoRuta).child("Actual").setValue(FechaHelper.converterFecha(new Date()));
+
+        Log.i("ConectarFirebase","[ConectarFirebase.crearActual]");
+    }
+
+    /**
+     * Método que elimina todos los datos de Firebase
+     */
+    public void resetFirebase()
+    {
+        myFireNombreRuta.removeValue();
+
+        Log.i("ConectarFirebase","[ConectarFirebase.resetFirebase]");
     }
 }

@@ -27,6 +27,7 @@ public class MisFragmentPreferencias extends PreferenceActivity
             return true;
         else if (Ruta.class.getName().equals(fragmentName))
             return true;
+
         return false;
     }
 }

@@ -1,4 +1,4 @@
-package com.david.proyecto.ciclo.siguealciclista;
+package com.david.proyecto.ciclo.siguealciclista.firebase.eventos;
 
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -10,15 +10,15 @@ import android.widget.Toast;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
+import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
+import com.david.proyecto.ciclo.siguealciclista.firebase.ConectarFirebase;
+import com.david.proyecto.ciclo.siguealciclista.firebase.DatosFirebase;
 import com.david.proyecto.ciclo.siguealciclista.helpers.MisNotificaciones;
-import com.david.proyecto.ciclo.siguealciclista.helpers.fechaHelper;
-import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
+import com.david.proyecto.ciclo.siguealciclista.helpers.Preferencias;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-
-import java.util.Date;
 
 /**
  * David López González on 14/05/16.
@@ -73,7 +73,7 @@ public class MiValueEventListener implements ValueEventListener
         {
             fechaEnQueCambia = snapshot.getValue().toString();
 
-            //Toast.makeText(activity, fechaEnQueCambia, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, fechaEnQueCambia, Toast.LENGTH_SHORT).show();
             Log.i(activity.getLocalClassName(), "se produce cambio " + fechaEnQueCambia);
 
             //notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(activity.getApplicationContext(), fechaEnQueCambia, "2"));
@@ -88,7 +88,12 @@ public class MiValueEventListener implements ValueEventListener
             {
                 //TODO cuando se produzca el cambio hay q buscar ese valor en la raiz de la ruta
                 //necesito la fecha para poner el valor en la linea de abajo y así obtener los datos
-                Firebase f = new Firebase(FIREBASE_URL + "/" + preferencias.getRuta(activity.getApplicationContext()) + "/" + fechaCambios);
+                Firebase f = new Firebase(FIREBASE_URL + "/" + Preferencias.getRuta(activity.getApplicationContext())
+                        + "/" + fechaCambios);
+                //Firebase f2 = new Firebase(FIREBASE_URL + "/" + Preferencias.getRuta(activity.getApplicationContext()));
+                //27-05-2016 22:31:21
+                //Query q =f2.startAt("27-05-2016 22:31:21").endAt();
+                // System.out.println("ooo"+ q);
                 f.addValueEventListener(new ValueEventListener()
                 {
                     @Override
@@ -96,13 +101,12 @@ public class MiValueEventListener implements ValueEventListener
                     {
                         try
                         {
-                            float latiud = Float.parseFloat(snapshot.child("Latitud").getValue().toString());
+                            float latitud = Float.parseFloat(snapshot.child("Latitud").getValue().toString());
                             float longitud = Float.parseFloat(snapshot.child("Longitud").getValue().toString());
                             String user = snapshot.child("User").getValue().toString();
                             Toast.makeText(activity.getApplicationContext(), snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
                             //TODO aqui meteriamos en la BBDD
-                            //UtilsBBDD.insertSQL(db, new PuntoMapa(fechaCambios, preferencias.getRuta(activity.getApplicationContext()), user, new Coordenadas(longitud, latiud)));
-                            usdbh.insertarCoordenada(db, new PuntoMapa(fechaCambios, preferencias.getRuta(activity.getApplicationContext()), user, new Coordenadas(longitud, latiud)));
+                            usdbh.insertarCoordenada(db, new PuntoMapa(fechaCambios, Preferencias.getRuta(activity.getApplicationContext()), user, new Coordenadas(longitud, latitud)));
                             String critico = snapshot.child("Critico").getValue().toString();
                             if (critico.equals("si"))
                                 notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(activity.getApplicationContext(), user, fechaCambios));
@@ -112,9 +116,7 @@ public class MiValueEventListener implements ValueEventListener
                     }
 
                     @Override
-                    public void onCancelled(FirebaseError error)
-                    {
-                    }
+                    public void onCancelled(FirebaseError error){}
                 });
             }
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -122,7 +124,7 @@ public class MiValueEventListener implements ValueEventListener
         {
             // Si falla, crearemos la rama para poder trabajar
             Log.e(activity.getLocalClassName(), "Error en [MiValueEventListener.onDataChange].  Creamos la rama");
-            new ConectarFirebase(activity.getApplicationContext(), preferencias.getRuta(activity.getApplicationContext()))
+            new ConectarFirebase(activity.getApplicationContext(), Preferencias.getRuta(activity.getApplicationContext()))
                     .crearActual();
         }
     }

@@ -2,24 +2,27 @@ package com.david.proyecto.ciclo.siguealciclista;
 
 import android.app.NotificationManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
-import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
+import com.david.proyecto.ciclo.siguealciclista.firebase.eventos.MiChildEventListener;
+import com.david.proyecto.ciclo.siguealciclista.firebase.eventos.MiValueEventListener;
+import com.david.proyecto.ciclo.siguealciclista.helpers.GetContext;
+import com.david.proyecto.ciclo.siguealciclista.helpers.Preferencias;
 import com.david.proyecto.ciclo.siguealciclista.preferencias.MisFragmentPreferencias;
+import com.david.proyecto.ciclo.siguealciclista.servicios.MarcarUsuariosService;
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 
 import butterknife.Bind;
@@ -30,16 +33,14 @@ public class MainActivity extends AppCompatActivity
 {
     private String FIREBASE_URL = "https://sigue-al-ciclista.firebaseio.com/";
 
-    @Bind(R.id.textView)
-    TextView text;
-    @Bind(R.id.button)
-    Button button;
     @Bind(R.id.btnEnCabeza)
     Button btnEnCabeza;
 
 
     private Firebase myFirebaseRef;
     private NotificationManager notificationManager;
+
+    private Mapa mapa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,23 +53,31 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.relativeLayoutPrincipal).setBackgroundColor(Color.BLUE);
         // findViewById(R.id.relativeLayoutPrincipal).setBackground(getResources().getDrawable(R.drawable.boton_cuircular));
 
-        GPS gps= new GPS(getApplicationContext());
-        text.setText(gps.getCoordenadas().toString());
-
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        //myFirebaseRef = new Firebase(FIREBASE_URL).child(FIREBASE_COORDENADAS);
-        // myFirebaseRef = new Firebase(FIREBASE_URL).child(preferencias.getRuta(getApplicationContext()) + "/Actual");
-        myFirebaseRef = new Firebase(FIREBASE_URL).child(preferencias.getRutaActual(getApplicationContext()));
+        // myFirebaseRef = new Firebase(FIREBASE_URL).child(Preferencias.getRuta(getApplicationContext()) + "/Actual");
+        myFirebaseRef = new Firebase(FIREBASE_URL).child(Preferencias.getRutaActual(getApplicationContext()));
 
-        actualizarRutaAct();
-        //myFirebaseRef.addValueEventListener(new MiValueEventListener(MainActivity.this, FIREBASE_URL, notificationManager));
+        //actualizarRutaAct();
 
-        ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, UtilsBBDD.versionSQL());
+        // Servicio para subir los datos de todos los usuarios
+        Intent intent = new Intent(getApplicationContext(), MarcarUsuariosService.class);
+        GetContext.setContext(getApplicationContext());
+        startService(intent);
+
+
+        ManejadorBD usdbh = new ManejadorBD(this, Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
         SQLiteDatabase db = usdbh.getWritableDatabase();
         usdbh.verDatos(db);
-        // UtilsBBDD.borrarDatosSQL(db);
+        // Reset
+        //UtilsBBDD.borrarDatosSQL(db);
+
+        mapa = new Mapa(this, R.id.mapPrincipal);
+
+        //Firebase myFirebaseEvent = new Firebase(FIREBASE_URL + Preferencias.getRuta(getApplicationContext()));
+        //myFirebaseEvent.addChildEventListener(new MiChildEventListener(MainActivity.this));
+
     }
 
     // Menú
@@ -115,6 +124,8 @@ public class MainActivity extends AppCompatActivity
     {
         super.onResume();
         actualizarRutaAct();
+        Firebase myFirebaseRef2 = new Firebase(FIREBASE_URL + Preferencias.getRuta(getApplicationContext()));
+        myFirebaseRef2.addChildEventListener(new MiChildEventListener(MainActivity.this));
     }
 
     /**
@@ -129,13 +140,13 @@ public class MainActivity extends AppCompatActivity
         {
             try
             {
-                Log.i(getApplicationContext().getClassLoader().toString(), "Actualizamos datos en actualizarRutaAct");
+                Log.i("MainActivity", "Actualizamos datos en [MainActivity.actualizarRutaAct]");
                 myFirebaseRef.addValueEventListener(new MiValueEventListener(MainActivity.this, FIREBASE_URL, notificationManager));
                 ok = true;
             } catch (Exception e)
             {
                 ok = false;
-                Log.e(getClassLoader().toString(), "Error en [MainActivity.actualizarRutaAct]");
+                Log.e("MainActivity", "Error en [MainActivity.actualizarRutaAct]");
             } finally
             {
                 i++;

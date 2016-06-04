@@ -27,7 +27,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     ArrayList<PuntoMapa> datosUnicos;
 
-    public static final LatLng ALQUERIAS = new LatLng(38.014215, -1.035408);
+    //public static final LatLng ALQUERIAS = new LatLng(38.014215, -1.035408);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,8 +49,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         GPS gps = new GPS(getApplicationContext());
         LatLng latLng = new LatLng(gps.getCoordenadas().getLatitud(), gps.getCoordenadas().getLongitud());
         // Add a marker in Sydney and move the camera
-        mMap.addMarker(new MarkerOptions().position(ALQUERIAS).title("Alqerías"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(ALQUERIAS));
+        //mMap.addMarker(new MarkerOptions().position(ALQUERIAS).title("Alqerías"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
                 //.target(ALQUERIAS)      // Sets the center of the map to LatLng (refer to previous snippet)
@@ -81,7 +81,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     {
         ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, UtilsBBDD.versionSQL());
         SQLiteDatabase db = usdbh.getWritableDatabase();
-        //  usdbh.verDatos(db);
+          usdbh.verDatos(db);
         //  ArrayList<PuntoMapa> datos = usdbh.getDatos(db);
         //  usdbh.verDatosSinRepetir(db);
         //datosUnicos = usdbh.getPuntoMapaSinRepetir(db);
@@ -93,7 +93,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng l1 = new LatLng(datosUnicos.get(i).getCoordenadas().getLatitud(), datosUnicos.get(i).getCoordenadas().getLongitud());
             LatLng l2 = new LatLng(datosUnicos.get(i + 1).getCoordenadas().getLatitud(), datosUnicos.get(i + 1).getCoordenadas().getLongitud());
             drawPolilyne(new PolylineOptions().add(l1).add(l2));
-            System.out.println(datosUnicos.get(i) + " wwwww");
+            System.out.println(l1+"lllll");
+            System.out.println(l2+"lllll");
         }
     }
 }

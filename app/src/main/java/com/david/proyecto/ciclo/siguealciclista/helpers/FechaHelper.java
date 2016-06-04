@@ -8,7 +8,7 @@ import java.util.Date;
  * David López González on 8/05/16.
  * Proyecto ciclo DAM I.E.S Alquerías
  */
-public class fechaHelper
+public class FechaHelper
 {
     /**
      * Método de ayuda para transformar una fecha en formato específico

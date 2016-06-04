@@ -40,6 +40,11 @@
             android:enabled="true"
             android:exported="true">
         </service>
+        <service
+            android:name=".servicios.MarcarUsuariosService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>

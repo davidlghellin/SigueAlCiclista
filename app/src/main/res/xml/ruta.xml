@@ -4,7 +4,12 @@
     <EditTextPreference
         android:key="ruta"
         android:summary="Escribe el nombre de la ruta"
-        android:title="Nombre de la ruta">
-    </EditTextPreference>
+        android:title="Nombre de la ruta"/>
+
+
+    <EditTextPreference
+        android:key="grupo"
+        android:summary="Escribe el nombre del grupo"
+        android:title="Nombre del grupo"/>
 
 </PreferenceScreen>

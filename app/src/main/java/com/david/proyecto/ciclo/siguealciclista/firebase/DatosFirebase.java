@@ -1,4 +1,6 @@
-package com.david.proyecto.ciclo.siguealciclista;
+package com.david.proyecto.ciclo.siguealciclista.firebase;
+
+import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
 
 /**
  * David López González on 4/05/16.

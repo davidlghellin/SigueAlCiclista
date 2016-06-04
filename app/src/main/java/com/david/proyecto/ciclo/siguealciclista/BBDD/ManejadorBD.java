@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
-import com.david.proyecto.ciclo.siguealciclista.helpers.preferencias;
+import com.david.proyecto.ciclo.siguealciclista.helpers.Preferencias;
 
 import java.util.ArrayList;
 
@@ -118,7 +118,7 @@ public class ManejadorBD extends SQLiteOpenHelper
         ArrayList<PuntoMapa> datos = new ArrayList<>();
         try
         {
-            Cursor c = db.rawQuery("SELECT * FROM PuntoMapa WHERE ruta= '" + preferencias.getRuta(context) + "'", null);
+            Cursor c = db.rawQuery("SELECT * FROM PuntoMapa WHERE ruta= '" + Preferencias.getRuta(context) + "'", null);
             if (c.moveToFirst())
             {
                 do
@@ -263,6 +263,7 @@ public class ManejadorBD extends SQLiteOpenHelper
         {
             System.out.println(p);
         }
+        Log.i("ManejadorBD","[ManejadorBD.verDatos]");
     }
 
     /**

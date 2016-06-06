@@ -1,4 +1,4 @@
-package com.david.proyecto.ciclo.siguealciclista;
+package com.david.proyecto.ciclo.siguealciclista.actividades;
 
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -12,18 +12,22 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
+import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
+import com.david.proyecto.ciclo.siguealciclista.ColeccionPuntoMapa;
+import com.david.proyecto.ciclo.siguealciclista.Mapa;
+import com.david.proyecto.ciclo.siguealciclista.R;
 import com.david.proyecto.ciclo.siguealciclista.firebase.eventos.MiChildEventListener;
 import com.david.proyecto.ciclo.siguealciclista.firebase.eventos.MiValueEventListener;
 import com.david.proyecto.ciclo.siguealciclista.helpers.GetContext;
 import com.david.proyecto.ciclo.siguealciclista.helpers.Preferencias;
 import com.david.proyecto.ciclo.siguealciclista.preferencias.MisFragmentPreferencias;
 import com.david.proyecto.ciclo.siguealciclista.servicios.MarcarUsuariosService;
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 
+
+import java.util.LinkedList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,12 +36,16 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity
 {
     private String FIREBASE_URL = "https://sigue-al-ciclista.firebaseio.com/";
+    private String FIREBASE_RUTA;
 
     @Bind(R.id.btnEnCabeza)
     Button btnEnCabeza;
 
 
     private Firebase myFirebaseRef;
+    private Firebase myFirebaseEvent;
+    private MiChildEventListener miChildEventListener;
+
     private NotificationManager notificationManager;
 
     private Mapa mapa;
@@ -58,6 +66,7 @@ public class MainActivity extends AppCompatActivity
 
         // myFirebaseRef = new Firebase(FIREBASE_URL).child(Preferencias.getRuta(getApplicationContext()) + "/Actual");
         myFirebaseRef = new Firebase(FIREBASE_URL).child(Preferencias.getRutaActual(getApplicationContext()));
+        FIREBASE_RUTA = FIREBASE_URL + Preferencias.getRuta(getApplicationContext());
 
         //actualizarRutaAct();
 
@@ -70,6 +79,9 @@ public class MainActivity extends AppCompatActivity
         ManejadorBD usdbh = new ManejadorBD(this, Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
         SQLiteDatabase db = usdbh.getWritableDatabase();
         usdbh.verDatos(db);
+        List<PuntoMapa> lista = usdbh.getPuntoMapaRutaSinRepetir(db);
+        ColeccionPuntoMapa coleccionPuntoMapa=new ColeccionPuntoMapa(lista);
+        coleccionPuntoMapa.serializar();
         // Reset
         //UtilsBBDD.borrarDatosSQL(db);
 
@@ -102,6 +114,9 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                 break;
             case R.id.MnuOpc3:
+                startActivity(new Intent(getApplicationContext(), GestionarBBDD.class));
+                break;
+            case R.id.MnuOpc0:
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -115,6 +130,28 @@ public class MainActivity extends AppCompatActivity
     }
     // Fin menú
 
+    public void actualizarChildEventListener()
+    {
+        if (myFirebaseEvent == null)
+        {
+            myFirebaseEvent = new Firebase(FIREBASE_URL + Preferencias.getRuta(getApplicationContext()));
+            miChildEventListener = new MiChildEventListener(MainActivity.this);
+            myFirebaseEvent.addChildEventListener(miChildEventListener);
+        }
+        // Hemos cambiado de ruta y/o grupo
+        if (!FIREBASE_RUTA.equals(FIREBASE_URL + Preferencias.getRuta(getApplicationContext())))
+        {
+            // Quitamos el eventListener
+            myFirebaseEvent.removeEventListener(miChildEventListener);
+            // Actualizamos la ruta a la conexión de Firebase
+            FIREBASE_RUTA = FIREBASE_URL + Preferencias.getRuta(getApplicationContext());
+            myFirebaseEvent = new Firebase(FIREBASE_RUTA);
+            // Creamos el eventlistener
+            miChildEventListener = new MiChildEventListener(MainActivity.this);
+            // Asignamos el eventListener
+            myFirebaseEvent.addChildEventListener(miChildEventListener);
+        }
+    }
 
     /**
      * Volvemos a la actividad
@@ -123,13 +160,16 @@ public class MainActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        actualizarRutaAct();
-        Firebase myFirebaseRef2 = new Firebase(FIREBASE_URL + Preferencias.getRuta(getApplicationContext()));
-        myFirebaseRef2.addChildEventListener(new MiChildEventListener(MainActivity.this));
+        //actualizarRutaAct();
+        actualizarChildEventListener();
+        //TODO revisar esta mal, ya que cada vez que entra a la actividad crea el eventListener
+        //Firebase myFirebaseRef2 = new Firebase(FIREBASE_URL + Preferencias.getRuta(getApplicationContext()));
+        //myFirebaseRef2.addChildEventListener(new MiChildEventListener(MainActivity.this));
     }
 
     /**
      * Método de actualiza el MiValueEventListener
+     * Versión antigua (donde hacía la trampa)
      */
     private void actualizarRutaAct()
     {

@@ -118,7 +118,7 @@ public class ManejadorBD extends SQLiteOpenHelper
         ArrayList<PuntoMapa> datos = new ArrayList<>();
         try
         {
-            Cursor c = db.rawQuery("SELECT * FROM PuntoMapa WHERE ruta= '" + Preferencias.getRuta(context) + "'", null);
+            Cursor c = db.rawQuery("SELECT * FROM PuntoMapa WHERE ruta= '" + Preferencias.getRuta(context) + "' ORDER BY fecha", null);
             if (c.moveToFirst())
             {
                 do
@@ -142,12 +142,30 @@ public class ManejadorBD extends SQLiteOpenHelper
         return datos;
     }
 
+    /**
+     * comprueba si hay con esa ruta(grupo)
+     *
+     * @param db
+     * @param puntoMapa
+     * @return
+     */
     private boolean comprobarCoordenada(SQLiteDatabase db, PuntoMapa puntoMapa)
     {
         Cursor c = db.rawQuery("SELECT * FROM PuntoMapa WHERE " +
                 "ruta = \"" + puntoMapa.getRuta() + "\" " +
                 "AND longitud = \"" + puntoMapa.getCoordenadas().getLongitud() + "\" " +
                 "AND latitud = \"" + puntoMapa.getCoordenadas().getLatitud() + "\"", null);
+        if (c.getCount() <= 0)
+            return false;
+
+        return true;
+    }
+
+    private boolean comprobarRutaGrupoHora(SQLiteDatabase db, PuntoMapa puntoMapa)
+    {
+        Cursor c = db.rawQuery("SELECT * FROM PuntoMapa WHERE " +
+                "ruta = \"" + puntoMapa.getRuta() + "\" " +
+                "AND fecha = \"" + puntoMapa.getFecha() + "\"", null);
         if (c.getCount() <= 0)
             return false;
 
@@ -174,10 +192,10 @@ public class ManejadorBD extends SQLiteOpenHelper
         return false;
     }
 
-    public boolean insertarCoordenada(SQLiteDatabase db, PuntoMapa p)
+    public void insertarCoordenada(SQLiteDatabase db, PuntoMapa p)
     {
-        if (p.getFecha() == null || p.getRuta() == null || p.getUser() == null)
-            return false;
+        if (p.getFecha() == null || p.getRuta() == null || p.getUser() == null || comprobarRutaGrupoHora(db, p))
+            return ;
         try
         {
             insertarPuntoMapa(db, p);
@@ -185,9 +203,8 @@ public class ManejadorBD extends SQLiteOpenHelper
         } catch (Exception e)
         {
             Log.e("ManejadorBD", "Error en [ManejadorBD.insertarCoordenada]");
-            return false;
+            return ;
         }
-        return true;
     }
 
     private void insertarPuntoMapa(SQLiteDatabase db, PuntoMapa p)
@@ -211,7 +228,7 @@ public class ManejadorBD extends SQLiteOpenHelper
 
     public void verDatosSinRepetir(SQLiteDatabase db)
     {
-        ArrayList<PuntoMapa> datos = getDatos(db);
+        ArrayList<PuntoMapa> datos = getDatosRuta(db);
         PuntoMapa aux = new PuntoMapa(new Coordenadas(0.f, 0.f));
         for (PuntoMapa p : datos)
         {
@@ -263,7 +280,7 @@ public class ManejadorBD extends SQLiteOpenHelper
         {
             System.out.println(p);
         }
-        Log.i("ManejadorBD","[ManejadorBD.verDatos]");
+        Log.i("ManejadorBD", "[ManejadorBD.verDatos]");
     }
 
     /**

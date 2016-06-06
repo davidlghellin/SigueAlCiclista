@@ -1,11 +1,14 @@
 package com.david.proyecto.ciclo.siguealciclista;
 
+import java.io.Serializable;
+
 /**
  * David López González on 26/04/16.
  * Proyecto ciclo DAM I.E.S Alquerías
  */
-public class Coordenadas
+public class Coordenadas implements Serializable
 {
+    private static final long serialVersionUID = 99656478674716638L;
     private float longitud;
     private float latitud;
 

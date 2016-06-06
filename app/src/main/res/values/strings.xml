@@ -2,7 +2,9 @@
     <string name="app_name">Sigue al ciclista</string>
     <string name="action_settings_menu1">Preferencias</string>
     <string name="action_settings_menu2">Ver ruta</string>
-    <string name="action_settings_menu3">Salir</string>
+    <string name="action_settings_menu3">Gestionar</string>
+
+    <string name="action_settings_menu0">Salir</string>
 
     <string name="title_activity_maps">Map</string>
 

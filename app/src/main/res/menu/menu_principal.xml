@@ -20,6 +20,11 @@
           android:orderInCategory="100"
           app:showAsAction="never"/>
 
+    <item android:id="@+id/MnuOpc0"
+          android:title="@string/action_settings_menu0"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+
 
 
 

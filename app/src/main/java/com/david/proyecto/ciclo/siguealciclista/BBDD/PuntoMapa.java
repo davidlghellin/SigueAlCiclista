@@ -3,14 +3,16 @@ package com.david.proyecto.ciclo.siguealciclista.BBDD;
 import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
 import com.david.proyecto.ciclo.siguealciclista.helpers.FechaHelper;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * David López González on 14/05/16.
  * Proyecto ciclo DAM I.E.S Alquerías
  */
-public class PuntoMapa
+public class PuntoMapa implements Serializable
 {
+    private static final long serialVersionUID = 799656478674716638L;
     private String fecha;
     private String ruta;
     private String user;

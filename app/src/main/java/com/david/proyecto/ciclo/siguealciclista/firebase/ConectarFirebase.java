@@ -48,7 +48,6 @@ public class ConectarFirebase
     }
 
     /**
-     *
      * @param context
      */
     public ConectarFirebase(Context context)
@@ -67,13 +66,14 @@ public class ConectarFirebase
         String strfecha = FechaHelper.converterFecha(new Date());
         if (coordenadas != null)
         {
-            myFireNombreRuta.child(textoRuta).child("Actual").setValue(strfecha);
+            textoRuta = Preferencias.getRuta(context);
+            //myFireNombreRuta.child(textoRuta).child("Actual").setValue(strfecha);
             myFireNombreRuta.child(textoRuta).child(strfecha).child("Longitud").setValue(coordenadas.getLongitud());
             myFireNombreRuta.child(textoRuta).child(strfecha).child("Latitud").setValue(coordenadas.getLatitud());
             myFireNombreRuta.child(textoRuta).child(strfecha).child("User").setValue(nombreUsuario);
             myFireNombreRuta.child(textoRuta).child(strfecha).child("Critico").setValue("si");
 
-            Log.i("ConectarFirebase","[ConectarFirebase.subirDatosPunto]");
+            Log.i("ConectarFirebase", "[ConectarFirebase.subirDatosPunto]");
         }
     }
 
@@ -82,12 +82,13 @@ public class ConectarFirebase
         String strfecha = FechaHelper.converterFecha(fecha);
         if (coordenadas != null)
         {
-            myFireNombreRuta.child(textoRuta).child("Actual").setValue(strfecha);
+            textoRuta = Preferencias.getRuta(context);
+            //myFireNombreRuta.child(textoRuta).child("Actual").setValue(strfecha);
             myFireNombreRuta.child(textoRuta).child(strfecha).child("Longitud").setValue(coordenadas.getLongitud());
             myFireNombreRuta.child(textoRuta).child(strfecha).child("Latitud").setValue(coordenadas.getLatitud());
             myFireNombreRuta.child(textoRuta).child(strfecha).child("User").setValue(nombreUsuario);
 
-            Log.i("ConectarFirebase","[ConectarFirebase.subirDatos]");
+            Log.i("ConectarFirebase", "[ConectarFirebase.subirDatos]");
         }
     }
 
@@ -95,11 +96,12 @@ public class ConectarFirebase
     {
         if (coordenadas != null)
         {
-           // myFireNombreRuta.child(textoRuta).child("Usuarios").setValue(nombreUsuario);
+            textoRuta = Preferencias.getRuta(context);
+            // myFireNombreRuta.child(textoRuta).child("Usuarios").setValue(nombreUsuario);
             myFireNombreRuta.child(textoRuta).child("Usuarios").child(nombreUsuario).child("Longitud").setValue(coordenadas.getLongitud());
             myFireNombreRuta.child(textoRuta).child("Usuarios").child(nombreUsuario).child("Latitud").setValue(coordenadas.getLatitud());
 
-            Log.i("ConectarFirebase","[ConectarFirebase.subirPosicionUsuario]");
+            Log.i("ConectarFirebase", "[ConectarFirebase.subirPosicionUsuario]");
         }
     }
 
@@ -112,7 +114,7 @@ public class ConectarFirebase
             myFireNombreRuta.child(textoRuta).child(fecha).child("Latitud").setValue(coordenadas.getLatitud());
             myFireNombreRuta.child(textoRuta).child(fecha).child("User").setValue(nombreUsuario);
 
-            Log.i("ConectarFirebase","[ConectarFirebase.subirDatos]");
+            Log.i("ConectarFirebase", "[ConectarFirebase.subirDatos]");
         }
     }
 
@@ -130,7 +132,7 @@ public class ConectarFirebase
     {
         myFireNombreRuta.child(textoRuta).child("Actual").setValue(FechaHelper.converterFecha(new Date()));
 
-        Log.i("ConectarFirebase","[ConectarFirebase.crearActual]");
+        Log.i("ConectarFirebase", "[ConectarFirebase.crearActual]");
     }
 
     /**
@@ -140,6 +142,6 @@ public class ConectarFirebase
     {
         myFireNombreRuta.removeValue();
 
-        Log.i("ConectarFirebase","[ConectarFirebase.resetFirebase]");
+        Log.i("ConectarFirebase", "[ConectarFirebase.resetFirebase]");
     }
 }

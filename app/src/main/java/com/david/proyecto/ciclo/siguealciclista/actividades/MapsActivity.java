@@ -1,4 +1,4 @@
-package com.david.proyecto.ciclo.siguealciclista;
+package com.david.proyecto.ciclo.siguealciclista.actividades;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -8,6 +8,8 @@ import android.os.Bundle;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
+import com.david.proyecto.ciclo.siguealciclista.GPS;
+import com.david.proyecto.ciclo.siguealciclista.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -81,20 +83,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     {
         ManejadorBD usdbh = new ManejadorBD(this, "SigueAlCiclista", null, UtilsBBDD.versionSQL());
         SQLiteDatabase db = usdbh.getWritableDatabase();
-          usdbh.verDatos(db);
+        usdbh.verDatos(db);
         //  ArrayList<PuntoMapa> datos = usdbh.getDatos(db);
         //  usdbh.verDatosSinRepetir(db);
         //datosUnicos = usdbh.getPuntoMapaSinRepetir(db);
         datosUnicos = usdbh.getPuntoMapaRutaSinRepetir(db);
         if (datosUnicos.size() > 0)
             mMap.addMarker(new MarkerOptions().position(new LatLng(datosUnicos.get(0).getCoordenadas().getLatitud(), datosUnicos.get(0).getCoordenadas().getLongitud())).title("Salida"));
-        for (int i = 0; i < datosUnicos.size() - 2; i++)
-        {
-            LatLng l1 = new LatLng(datosUnicos.get(i).getCoordenadas().getLatitud(), datosUnicos.get(i).getCoordenadas().getLongitud());
-            LatLng l2 = new LatLng(datosUnicos.get(i + 1).getCoordenadas().getLatitud(), datosUnicos.get(i + 1).getCoordenadas().getLongitud());
-            drawPolilyne(new PolylineOptions().add(l1).add(l2));
-            System.out.println(l1+"lllll");
-            System.out.println(l2+"lllll");
-        }
+        System.out.println(datosUnicos.size() + " lllll");
+        if (datosUnicos.size() >= 2)
+            for (int i = 0; i < datosUnicos.size() - 1; i++)
+            {
+                LatLng l1 = new LatLng(datosUnicos.get(i).getCoordenadas().getLatitud(), datosUnicos.get(i).getCoordenadas().getLongitud());
+                LatLng l2 = new LatLng(datosUnicos.get(i + 1).getCoordenadas().getLatitud(), datosUnicos.get(i + 1).getCoordenadas().getLongitud());
+                drawPolilyne(new PolylineOptions().add(l1).add(l2));
+                System.out.println(l1 + "lllll" + l2);
+            }
     }
 }

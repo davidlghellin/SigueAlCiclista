@@ -1,4 +1,4 @@
-package com.david.proyecto.ciclo.siguealciclista;
+package com.david.proyecto.ciclo.siguealciclista.hilos;
 
 
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
+import com.david.proyecto.ciclo.siguealciclista.GPS;
 import com.david.proyecto.ciclo.siguealciclista.firebase.ConectarFirebase;
 import com.david.proyecto.ciclo.siguealciclista.helpers.FechaHelper;
 import com.david.proyecto.ciclo.siguealciclista.helpers.Preferencias;

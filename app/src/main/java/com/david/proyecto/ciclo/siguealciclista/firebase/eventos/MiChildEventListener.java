@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
@@ -59,8 +60,16 @@ public class MiChildEventListener implements ChildEventListener
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s)
     {
-        String key = dataSnapshot.getKey();
         insertarDatos(dataSnapshot);
+        //Toast.makeText(activity.getApplicationContext(),"",Toast.LENGTH_SHORT).show();
+        // añadimos ruta
+        Log.i("MiChildEventListener", "[MiChildEventListener.onChildAdded]" );
+
+        ManejadorBD usdbh = new ManejadorBD(activity.getApplicationContext(), Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
+        SQLiteDatabase db = usdbh.getWritableDatabase();
+        System.out.println("punto________");
+        usdbh.verDatos(db);
+//        String key = dataSnapshot.getKey();
 //        if (key.equals("Actual"))
 //        {
 //            Log.i("MiChildEventListener", "[MiChildEventListener.onChildAdded] " + key);
@@ -76,7 +85,8 @@ public class MiChildEventListener implements ChildEventListener
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s)
     {
-        Log.i("MiChildEventListener", "[MiChildEventListener.onChildChanged] ppp " + s);
+        insertarDatos(dataSnapshot);
+        Log.i("MiChildEventListener", "[MiChildEventListener.onChildChanged] " + s);
     }
 
     @Override
@@ -117,12 +127,13 @@ public class MiChildEventListener implements ChildEventListener
         boolean critico;
         try
         {
+            System.out.println("ppp_____________");
             for (String valores : array)
             {
                 if (valores.contains("User"))
                 {
                     user = valores.split("=")[1];
-                    System.out.println("usuario: pppp " + valores.split("=")[1]);
+                    System.out.println("usuario: pppp " + user);
                 } else if (valores.contains("Critico"))
                 {
                     if ((valores.split("=")[1]).equalsIgnoreCase("si"))
@@ -134,19 +145,20 @@ public class MiChildEventListener implements ChildEventListener
                 } else if (valores.contains("Latitud"))
                 {
                     latitud = Float.parseFloat(valores.split("=")[1]);
-                    System.out.println("Latitud: pppp " + valores.split("=")[1]);
+                    System.out.println("Latitud: pppp " + latitud);
                 } else if (valores.contains("Longitud"))
                 {
                     longitud = Float.parseFloat(valores.split("=")[1]);
-                    System.out.println("Longitud: pppp " + valores.split("=")[1]);
+                    System.out.println("Longitud: pppp " + longitud);
                 }
             }
             //TODO insertar en bbdd
             usdbh.insertarCoordenada(db, new PuntoMapa(horaFecha, Preferencias.getRuta(activity.getApplicationContext()), user, new Coordenadas(longitud, latitud)));
             Log.i("MiChildEventListener", "[MiChildEventListener.insertarDatos]");
+            usdbh.verDatosSinRepetir(db);
         } catch (Exception e)
         {
-            Log.e("MiChildEventListener", "[MiChildEventListener.insertarDatos]");
+            Log.e("MiChildEventListener", "[MiChildEventListener.insertarDatos] " + e.getMessage());
         }
     }
 }

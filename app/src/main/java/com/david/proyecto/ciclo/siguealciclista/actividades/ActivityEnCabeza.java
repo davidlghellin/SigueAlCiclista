@@ -1,5 +1,6 @@
 package com.david.proyecto.ciclo.siguealciclista.actividades;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -15,8 +16,14 @@ import com.david.proyecto.ciclo.siguealciclista.Mapa;
 import com.david.proyecto.ciclo.siguealciclista.R;
 import com.david.proyecto.ciclo.siguealciclista.firebase.ConectarFirebase;
 import com.david.proyecto.ciclo.siguealciclista.helpers.GetContext;
+import com.david.proyecto.ciclo.siguealciclista.helpers.MisNotificaciones;
+import com.david.proyecto.ciclo.siguealciclista.helpers.Preferencias;
 import com.david.proyecto.ciclo.siguealciclista.hilos.MarcarRuta;
 import com.david.proyecto.ciclo.siguealciclista.servicios.MarcarRutaService;
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -31,9 +38,9 @@ import butterknife.OnClick;
  */
 public class ActivityEnCabeza extends AppCompatActivity
 {
-    public static final LatLng ALQUERIAS = new LatLng(38.014215, -1.035408);
     private GPS gpsActual;
     private Mapa mapa;
+    private Firebase myFirebaseEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -45,18 +52,55 @@ public class ActivityEnCabeza extends AppCompatActivity
 
         // GPS
         gpsActual = new GPS(getApplicationContext());
-        Intent intent = new Intent(getApplicationContext(), MarcarRutaService.class);
+        final Intent intent = new Intent(getApplicationContext(), MarcarRutaService.class);
         GetContext.setContext(getApplicationContext());
         startService(intent);
+        final NotificationManager  notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        //mapa
-        final LatLng latLng = new LatLng(gpsActual.getCoordenadas().getLatitud(), gpsActual.getCoordenadas().getLongitud());
-        // inicializarMapa(latLng);
+        // Para controlar el cambio de usuario
+        myFirebaseEvent = new Firebase("https://sigue-al-ciclista.firebaseio.com/" + Preferencias.getRuta(getApplicationContext()));
+        final ChildEventListener childEventListener = new ChildEventListener()
+        {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s)
+            {
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s)
+            {
+                String datos = dataSnapshot.getValue().toString();
+                String[] array = datos.replace("{", "").replace("}", "").replace(" ", "").split(",");
+                for (String valores : array)
+                {
+                    if (valores.contains("User"))
+                    {
+                        String user = valores.split("=")[1];
+                        if (!user.equals(Preferencias.getUsuario(getApplicationContext())))
+                        {
+                            // Notificación de cambio de la cabeza
+                            notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(getApplicationContext(),user,"Se produce cambio de cabeza"));
+
+                            cancelarSeguimiento();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot){}
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s){}
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError){}
+        };
+        myFirebaseEvent.addChildEventListener(childEventListener);
 
         mapa = new Mapa(getApplicationContext(), this);
 
     }
-
 
     @OnClick(R.id.btnCancelarSeguimiento)
     public void cancelarSeguimiento()

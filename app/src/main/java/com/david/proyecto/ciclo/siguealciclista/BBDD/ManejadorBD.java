@@ -306,7 +306,7 @@ public class ManejadorBD extends SQLiteOpenHelper
         ArrayList<PuntoMapa> datos = getDatosRuta(db);
         for (PuntoMapa p : datos)
         {
-            System.out.println(p);
+            System.out.println( "----"+ p);
         }
     }
 
@@ -315,6 +315,15 @@ public class ManejadorBD extends SQLiteOpenHelper
         Cursor c = db.rawQuery("SELECT user FROM PuntoMapa WHERE " +
                 "ruta = \"" + Preferencias.getRuta(context) + "\" " +
                 "ORDER BY \"" + Preferencias.getRuta(context) + "\" DESC LIMIT 1", null);
+
+        c.moveToFirst();
+        return c.getString(0);
+    }
+    public String getUltimoUsuario2(SQLiteDatabase db)
+    {
+        Cursor c = db.rawQuery("SELECT user FROM PuntoMapa WHERE " +
+                "ruta = \"" + Preferencias.getRuta(context) + "\" " +
+                "ORDER BY \"" + Preferencias.getRuta(context) + "\" LIMIT 1", null);
 
         c.moveToFirst();
         return c.getString(0);

@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity
         if (myFirebaseEvent == null)
         {
             myFirebaseEvent = new Firebase(FIREBASE_URL + Preferencias.getRuta(getApplicationContext()));
-            miChildEventListener = new MiChildEventListener(MainActivity.this);
+            miChildEventListener = new MiChildEventListener(MainActivity.this,notificationManager);
             myFirebaseEvent.addChildEventListener(miChildEventListener);
         }
         // Hemos cambiado de ruta y/o grupo

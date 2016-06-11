@@ -56,7 +56,7 @@ public class MarcarRutaService extends IntentService
         {
             gps.actualizarCoordenadas();
             //TODO comprobar antes de subir
-            if (!coordenadasAux.compararCoordenadas(gps.getCoordenadas()))
+           // if (!coordenadasAux.compararCoordenadas(gps.getCoordenadas()))
             {
                 // UtilsBBDD.insertSQL(db,new PuntoMapa(FechaHelper.converterFecha(new Date()), Preferencias.getRuta(context), Preferencias.getUsuario(context), gps.getCoordenadas()));
                 conectarFirebase.subirDatos(gps.getCoordenadas(), new Date());

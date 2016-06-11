@@ -10,6 +10,7 @@ import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
 import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
+import com.david.proyecto.ciclo.siguealciclista.helpers.MisNotificaciones;
 import com.david.proyecto.ciclo.siguealciclista.helpers.Preferencias;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -28,12 +29,22 @@ public class MiChildEventListener implements ChildEventListener
     private Activity activity;
     private ManejadorBD usdbh;
     private SQLiteDatabase db;
+    private NotificationManager notificationManager;
 
     public MiChildEventListener(Activity activity)
     {
         this.activity = activity;
         FIREBASE_URL = "https://sigue-al-ciclista.firebaseio.com/" + Preferencias.getRuta(activity.getApplicationContext());
         constructorBBDD();
+        Log.i("MiChildEventListener", FIREBASE_URL + "[MiChildEventListener(Activity)]");
+    }
+
+    public MiChildEventListener(Activity activity, NotificationManager notificationManager)
+    {
+        this.activity = activity;
+        FIREBASE_URL = "https://sigue-al-ciclista.firebaseio.com/" + Preferencias.getRuta(activity.getApplicationContext());
+        constructorBBDD();
+        this.notificationManager = notificationManager;
         Log.i("MiChildEventListener", FIREBASE_URL + "[MiChildEventListener(Activity)]");
     }
 
@@ -67,9 +78,9 @@ public class MiChildEventListener implements ChildEventListener
         // añadimos ruta
         Log.i("MiChildEventListener", "[MiChildEventListener.onChildAdded]");
 
-        ManejadorBD usdbh = new ManejadorBD(activity.getApplicationContext(), Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
-        SQLiteDatabase db = usdbh.getWritableDatabase();
-        usdbh.verDatos(db);
+     //   ManejadorBD usdbh = new ManejadorBD(activity.getApplicationContext(), Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
+     //   SQLiteDatabase db = usdbh.getWritableDatabase();
+     //   usdbh.verDatos(db);
         String key = dataSnapshot.getKey();
 
 //        if (key.equals("Actual"))
@@ -165,6 +176,7 @@ public class MiChildEventListener implements ChildEventListener
                     {
                         critico = true;
                         //notificacion
+                        //notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(activity.getApplicationContext(), user, "Ruta crítica"));
                         Log.i("MiChildEventListener", "[MiChildEventListener.insertarDatos.Critico:] " + true);
                     }
                 } else if (valores.contains("Latitud"))

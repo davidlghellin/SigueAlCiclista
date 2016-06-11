@@ -21,8 +21,8 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 /**
- * David López González on 14/05/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 14/05/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class MiValueEventListener implements ValueEventListener
 {
@@ -79,10 +79,6 @@ public class MiValueEventListener implements ValueEventListener
             //notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(activity.getApplicationContext(), fechaEnQueCambia, "2"));
             System.out.println("ruta total " + new Firebase(FIREBASE_URL).child(snapshot.getValue().toString()));
 
-            Log.i("CAMBIOSSS", "onDataChange: " + snapshot);
-            Log.i("CAMBIOSSS", "onDataChange: " + snapshot.getKey());
-            Log.i("CAMBIOSSS", "onDataChange: " + snapshot.getChildrenCount());
-            Log.i("CAMBIOSSS", "onDataChangeruta: " + snapshot.getValue());
             final String fechaCambios = (String) snapshot.getValue();
             if (fechaCambios != null)
             {
@@ -116,14 +112,17 @@ public class MiValueEventListener implements ValueEventListener
                     }
 
                     @Override
-                    public void onCancelled(FirebaseError error){}
+                    public void onCancelled(FirebaseError error)
+                    {
+                    }
                 });
             }
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            Log.i("MiValueEventListener", "[MiValueEventListener.onDataChange]");
         } catch (Exception e)
         {
             // Si falla, crearemos la rama para poder trabajar
-            Log.e(activity.getLocalClassName(), "Error en [MiValueEventListener.onDataChange].  Creamos la rama");
+            Log.e("MiValueEventListener", "[MiValueEventListener.onDataChange]");
             new ConectarFirebase(activity.getApplicationContext(), Preferencias.getRuta(activity.getApplicationContext()))
                     .crearActual();
         }
@@ -132,6 +131,12 @@ public class MiValueEventListener implements ValueEventListener
     @Override
     public void onCancelled(FirebaseError firebaseError)
     {
-        Log.e(activity.getLocalClassName(), "Error en [MiValueEventListener.onCancelled]");
+        try
+        {
+            Log.i("MiValueEventListener", "[MiValueEventListener.onCancelled]");
+        } catch (Exception e)
+        {
+            Log.e("MiValueEventListener", "[MiValueEventListener.onCancelled]");
+        }
     }
 }

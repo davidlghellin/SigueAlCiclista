@@ -7,8 +7,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * David López González on 14/05/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 14/05/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class PuntoMapa implements Serializable
 {

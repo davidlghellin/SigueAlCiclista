@@ -15,8 +15,9 @@ import com.david.proyecto.ciclo.siguealciclista.helpers.Preferencias;
 import java.util.Date;
 
 /**
- * David López González on 7/05/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 7/05/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
+ * @deprecated
  */
 public class MarcarRuta implements Runnable
 {
@@ -24,20 +25,16 @@ public class MarcarRuta implements Runnable
     private boolean continuaHilo = true;
     private ConectarFirebase conectarFirebase;
     private Context context;
-    //private String nombreUsuario;
 
     //bbdd
     private SQLiteDatabase db;
-    //private SharedPreferences prefs;
     private ManejadorBD usdbh;
-    //private Mapa mapa;
 
     public MarcarRuta(Context context)
     {
         this.context = context;
         this.gps = new GPS(context);
-        //prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        //conectarFirebase = new ConectarFirebase(context, prefs.getString("ruta", "rutaPorDefecto"));
+
         conectarFirebase = new ConectarFirebase(context);
 
         //BBDD

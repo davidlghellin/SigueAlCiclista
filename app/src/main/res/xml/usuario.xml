@@ -7,4 +7,10 @@
         android:title="Nombre de usuario">
     </EditTextPreference>
 
+    <EditTextPreference
+        android:key="correo"
+        android:summary="Escribe la dirección de correo electronica"
+        android:title="Correo electronico">
+    </EditTextPreference>
+
 </PreferenceScreen>

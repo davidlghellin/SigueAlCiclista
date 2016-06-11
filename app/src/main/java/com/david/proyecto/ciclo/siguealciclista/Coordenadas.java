@@ -3,8 +3,8 @@ package com.david.proyecto.ciclo.siguealciclista;
 import java.io.Serializable;
 
 /**
- * David López González on 26/04/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 26/04/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class Coordenadas implements Serializable
 {

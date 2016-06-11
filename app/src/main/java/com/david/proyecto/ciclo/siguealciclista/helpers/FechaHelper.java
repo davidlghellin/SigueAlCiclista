@@ -5,8 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * David López González on 8/05/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 8/05/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class FechaHelper
 {
@@ -30,7 +30,7 @@ public class FechaHelper
      * @return Objeto Date
      */
     public static Date ParseFecha(String fecha)
-    {//dd/MM/yyyy
+    {
         SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy HH:mm:SS");
         Date fechaDate = null;
         try

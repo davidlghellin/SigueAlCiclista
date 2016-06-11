@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.widget.Toast;
 
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
@@ -25,7 +26,6 @@ public class MarcarRutaService extends IntentService
     private ManejadorBD usdbh;
     private SQLiteDatabase db;
     private Coordenadas coordenadasAux;
-    //MarcarRuta marcarRuta;
 
     private ConectarFirebase conectarFirebase;
 
@@ -60,8 +60,8 @@ public class MarcarRutaService extends IntentService
             {
                 // UtilsBBDD.insertSQL(db,new PuntoMapa(FechaHelper.converterFecha(new Date()), Preferencias.getRuta(context), Preferencias.getUsuario(context), gps.getCoordenadas()));
                 conectarFirebase.subirDatos(gps.getCoordenadas(), new Date());
+                coordenadasAux = gps.getCoordenadas();
             }
-            coordenadasAux = gps.getCoordenadas();
             SystemClock.sleep(3000);
         }
     }

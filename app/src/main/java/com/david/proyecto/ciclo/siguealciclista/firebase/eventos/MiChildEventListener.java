@@ -15,10 +15,12 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 
+import java.util.LinkedList;
+
 
 /**
- * David López González on 3/06/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 3/06/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class MiChildEventListener implements ChildEventListener
 {
@@ -63,13 +65,13 @@ public class MiChildEventListener implements ChildEventListener
         insertarDatos(dataSnapshot);
         //Toast.makeText(activity.getApplicationContext(),"",Toast.LENGTH_SHORT).show();
         // añadimos ruta
-        Log.i("MiChildEventListener", "[MiChildEventListener.onChildAdded]" );
+        Log.i("MiChildEventListener", "[MiChildEventListener.onChildAdded]");
 
         ManejadorBD usdbh = new ManejadorBD(activity.getApplicationContext(), Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
         SQLiteDatabase db = usdbh.getWritableDatabase();
-        System.out.println("punto________");
         usdbh.verDatos(db);
-//        String key = dataSnapshot.getKey();
+        String key = dataSnapshot.getKey();
+
 //        if (key.equals("Actual"))
 //        {
 //            Log.i("MiChildEventListener", "[MiChildEventListener.onChildAdded] " + key);
@@ -85,26 +87,50 @@ public class MiChildEventListener implements ChildEventListener
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s)
     {
-        insertarDatos(dataSnapshot);
-        Log.i("MiChildEventListener", "[MiChildEventListener.onChildChanged] " + s);
+        try
+        {
+            insertarDatos(dataSnapshot);
+            Log.i("MiChildEventListener", "[MiChildEventListener.onChildChanged] " + s);
+        } catch (Exception e)
+        {
+            Log.e("MiChildEventListener", "[MiChildEventListener.onChildChanged] " + s);
+        }
     }
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot)
     {
-        Log.i("MiChildEventListener", "[MiChildEventListener.onChildRemoved]");
+        try
+        {
+            Log.i("MiChildEventListener", "[MiChildEventListener.onChildRemoved]");
+        } catch (Exception e)
+        {
+            Log.e("MiChildEventListener", "[MiChildEventListener.onChildRemoved]");
+        }
     }
 
     @Override
     public void onChildMoved(DataSnapshot dataSnapshot, String s)
     {
-        Log.i("MiChildEventListener", "[MiChildEventListener.onChildMoved]");
+        try
+        {
+            Log.i("MiChildEventListener", "[MiChildEventListener.onChildMoved]");
+        } catch (Exception e)
+        {
+            Log.e("MiChildEventListener", "[MiChildEventListener.onChildMoved]");
+        }
     }
 
     @Override
     public void onCancelled(FirebaseError firebaseError)
     {
-        Log.i("MiChildEventListener", "[MiChildEventListener.onCancelled]");
+        try
+        {
+            Log.i("MiChildEventListener", "[MiChildEventListener.onCancelled]");
+        } catch (Exception e)
+        {
+            Log.e("MiChildEventListener", "[MiChildEventListener.onCancelled]");
+        }
     }
 
     private String[] arrayDatos(String datos)
@@ -127,32 +153,30 @@ public class MiChildEventListener implements ChildEventListener
         boolean critico;
         try
         {
-            System.out.println("ppp_____________");
             for (String valores : array)
             {
                 if (valores.contains("User"))
                 {
                     user = valores.split("=")[1];
-                    System.out.println("usuario: pppp " + user);
+                    Log.i("MiChildEventListener", "[MiChildEventListener.insertarDatos.User:] " + user);
                 } else if (valores.contains("Critico"))
                 {
                     if ((valores.split("=")[1]).equalsIgnoreCase("si"))
                     {
                         critico = true;
                         //notificacion
-                        System.out.println("Critico: pppp " + valores.split("=")[1]);
+                        Log.i("MiChildEventListener", "[MiChildEventListener.insertarDatos.Critico:] " + true);
                     }
                 } else if (valores.contains("Latitud"))
                 {
                     latitud = Float.parseFloat(valores.split("=")[1]);
-                    System.out.println("Latitud: pppp " + latitud);
+                    Log.i("MiChildEventListener", "[MiChildEventListener.insertarDatos.Latitud:] " + latitud);
                 } else if (valores.contains("Longitud"))
                 {
                     longitud = Float.parseFloat(valores.split("=")[1]);
-                    System.out.println("Longitud: pppp " + longitud);
+                    Log.i("MiChildEventListener", "[MiChildEventListener.insertarDatos.Longitud:] " + longitud);
                 }
             }
-            //TODO insertar en bbdd
             usdbh.insertarCoordenada(db, new PuntoMapa(horaFecha, Preferencias.getRuta(activity.getApplicationContext()), user, new Coordenadas(longitud, latitud)));
             Log.i("MiChildEventListener", "[MiChildEventListener.insertarDatos]");
             usdbh.verDatosSinRepetir(db);
@@ -160,5 +184,22 @@ public class MiChildEventListener implements ChildEventListener
         {
             Log.e("MiChildEventListener", "[MiChildEventListener.insertarDatos] " + e.getMessage());
         }
+    }
+
+    /**
+     * Comprueba si se ha cambiado de usuario para terminar la subidad de datos
+     *
+     * @return True en caso de que se produzca cambio de usuario, False seguimos con el mismo usuario subiendo datos
+     */
+    public boolean comprobarCambioUser()
+    {
+        ManejadorBD usdbh = new ManejadorBD(activity.getApplicationContext(), Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
+        SQLiteDatabase db = usdbh.getWritableDatabase();
+        String ultimoUser = usdbh.getUltimoUsuario(db);
+        if (ultimoUser.equals(Preferencias.getUsuario(activity.getApplicationContext())))
+        {
+            return false;
+        }
+        return true;
     }
 }

@@ -5,12 +5,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Created by wizord on 1/06/16.
+ * @author David López González on 1/06/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class Internet
 {
     /**
      * Método que comprueba si tenemos conexión a internet.
+     *
      * @param context Contexto de la actividad.
      * @return True si tenemos conexión a internet, False en caso contrario.
      */

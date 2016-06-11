@@ -14,8 +14,8 @@ import com.david.proyecto.ciclo.siguealciclista.helpers.FechaHelper;
 import java.util.Date;
 
 /**
- * David López González on 8/05/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 8/05/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class ConectarFirebase
 {
@@ -26,11 +26,9 @@ public class ConectarFirebase
     private Firebase myFireNombreRuta;
     private Context context;
     private String textoRuta;
-    //private GPS gps;
 
 
     private String nombreUsuario;
-    //private SharedPreferences prefs;
 
     /**
      * @param context
@@ -63,66 +61,97 @@ public class ConectarFirebase
 
     public void subirDatosPunto(Coordenadas coordenadas)
     {
-        String strfecha = FechaHelper.converterFecha(new Date());
-        if (coordenadas != null)
+        try
         {
-            textoRuta = Preferencias.getRuta(context);
-            //myFireNombreRuta.child(textoRuta).child("Actual").setValue(strfecha);
-            myFireNombreRuta.child(textoRuta).child(strfecha).child("Longitud").setValue(coordenadas.getLongitud());
-            myFireNombreRuta.child(textoRuta).child(strfecha).child("Latitud").setValue(coordenadas.getLatitud());
-            myFireNombreRuta.child(textoRuta).child(strfecha).child("User").setValue(nombreUsuario);
-            myFireNombreRuta.child(textoRuta).child(strfecha).child("Critico").setValue("si");
+            String strfecha = FechaHelper.converterFecha(new Date());
+            if (coordenadas != null)
+            {
+                textoRuta = Preferencias.getRuta(context);
+                //myFireNombreRuta.child(textoRuta).child("Actual").setValue(strfecha);
+                myFireNombreRuta.child(textoRuta).child(strfecha).child("Longitud").setValue(coordenadas.getLongitud());
+                myFireNombreRuta.child(textoRuta).child(strfecha).child("Latitud").setValue(coordenadas.getLatitud());
+                myFireNombreRuta.child(textoRuta).child(strfecha).child("User").setValue(nombreUsuario);
+                myFireNombreRuta.child(textoRuta).child(strfecha).child("Critico").setValue("si");
 
-            Log.i("ConectarFirebase", "[ConectarFirebase.subirDatosPunto]");
+                Log.i("ConectarFirebase", "[ConectarFirebase.subirDatosPunto]");
+            }
+        } catch (Exception e)
+        {
+            Log.e("ConectarFirebase", "[ConectarFirebase.subirDatosPunto]");
         }
     }
 
     public void subirDatos(Coordenadas coordenadas, Date fecha)
     {
-        String strfecha = FechaHelper.converterFecha(fecha);
-        if (coordenadas != null)
+        try
         {
-            textoRuta = Preferencias.getRuta(context);
-            //myFireNombreRuta.child(textoRuta).child("Actual").setValue(strfecha);
-            myFireNombreRuta.child(textoRuta).child(strfecha).child("Longitud").setValue(coordenadas.getLongitud());
-            myFireNombreRuta.child(textoRuta).child(strfecha).child("Latitud").setValue(coordenadas.getLatitud());
-            myFireNombreRuta.child(textoRuta).child(strfecha).child("User").setValue(nombreUsuario);
+            String strfecha = FechaHelper.converterFecha(fecha);
+            if (coordenadas != null)
+            {
+                textoRuta = Preferencias.getRuta(context);
+                //myFireNombreRuta.child(textoRuta).child("Actual").setValue(strfecha);
+                myFireNombreRuta.child(textoRuta).child(strfecha).child("Longitud").setValue(coordenadas.getLongitud());
+                myFireNombreRuta.child(textoRuta).child(strfecha).child("Latitud").setValue(coordenadas.getLatitud());
+                myFireNombreRuta.child(textoRuta).child(strfecha).child("User").setValue(nombreUsuario);
 
-            Log.i("ConectarFirebase", "[ConectarFirebase.subirDatos]");
+                Log.i("ConectarFirebase", "[ConectarFirebase.subirDatos]");
+            }
+        } catch (Exception e)
+        {
+            Log.e("ConectarFirebase", "[ConectarFirebase.subirDatos]");
         }
     }
 
     public void subirPosicionUsuario(Coordenadas coordenadas)
     {
-        if (coordenadas != null)
+        try
         {
-            textoRuta = Preferencias.getRuta(context);
-            // myFireNombreRuta.child(textoRuta).child("Usuarios").setValue(nombreUsuario);
-            myFireNombreRuta.child(textoRuta).child("Usuarios").child(nombreUsuario).child("Longitud").setValue(coordenadas.getLongitud());
-            myFireNombreRuta.child(textoRuta).child("Usuarios").child(nombreUsuario).child("Latitud").setValue(coordenadas.getLatitud());
+            if (coordenadas != null)
+            {
+                textoRuta = Preferencias.getRuta(context);
+                // myFireNombreRuta.child(textoRuta).child("Usuarios").setValue(nombreUsuario);
+                myFireNombreRuta.child(textoRuta).child("Usuarios").child(nombreUsuario).child("Longitud").setValue(coordenadas.getLongitud());
+                myFireNombreRuta.child(textoRuta).child("Usuarios").child(nombreUsuario).child("Latitud").setValue(coordenadas.getLatitud());
 
-            Log.i("ConectarFirebase", "[ConectarFirebase.subirPosicionUsuario]");
+                Log.i("ConectarFirebase", "[ConectarFirebase.subirPosicionUsuario]");
+            }
+        } catch (Exception e)
+        {
+            Log.e("ConectarFirebase", "[ConectarFirebase.subirPosicionUsuario]");
         }
     }
 
     public void subirDatos(Coordenadas coordenadas, String fecha)
     {
-        if (coordenadas != null)
+        try
         {
-            myFireNombreRuta.child(textoRuta).child("Actual").setValue(fecha);
-            myFireNombreRuta.child(textoRuta).child(fecha).child("Longitud").setValue(coordenadas.getLongitud());
-            myFireNombreRuta.child(textoRuta).child(fecha).child("Latitud").setValue(coordenadas.getLatitud());
-            myFireNombreRuta.child(textoRuta).child(fecha).child("User").setValue(nombreUsuario);
+            if (coordenadas != null)
+            {
+                myFireNombreRuta.child(textoRuta).child("Actual").setValue(fecha);
+                myFireNombreRuta.child(textoRuta).child(fecha).child("Longitud").setValue(coordenadas.getLongitud());
+                myFireNombreRuta.child(textoRuta).child(fecha).child("Latitud").setValue(coordenadas.getLatitud());
+                myFireNombreRuta.child(textoRuta).child(fecha).child("User").setValue(nombreUsuario);
 
-            Log.i("ConectarFirebase", "[ConectarFirebase.subirDatos]");
+                Log.i("ConectarFirebase", "[ConectarFirebase.subirDatos]");
+            }
+        } catch (Exception e)
+        {
+            Log.e("ConectarFirebase", "[ConectarFirebase.subirDatos]");
         }
     }
 
     public void subirDatos()
     {
-        GPS gps = new GPS(context);
-        Coordenadas coordenadas = gps.getCoordenadas();
-        subirDatosPunto(coordenadas);
+        try
+        {
+            GPS gps = new GPS(context);
+            Coordenadas coordenadas = gps.getCoordenadas();
+            subirDatosPunto(coordenadas);
+            Log.i("ConectarFirebase", "[ConectarFirebase.subirDatos]");
+        } catch (Exception e)
+        {
+            Log.e("ConectarFirebase", "[ConectarFirebase.subirDatos]");
+        }
     }
 
     /**
@@ -130,9 +159,15 @@ public class ConectarFirebase
      */
     public void crearActual()
     {
-        myFireNombreRuta.child(textoRuta).child("Actual").setValue(FechaHelper.converterFecha(new Date()));
+        try
+        {
+            myFireNombreRuta.child(textoRuta).child("Actual").setValue(FechaHelper.converterFecha(new Date()));
 
-        Log.i("ConectarFirebase", "[ConectarFirebase.crearActual]");
+            Log.i("ConectarFirebase", "[ConectarFirebase.crearActual]");
+        } catch (Exception e)
+        {
+            Log.e("ConectarFirebase", "[ConectarFirebase.crearActual]");
+        }
     }
 
     /**
@@ -140,8 +175,14 @@ public class ConectarFirebase
      */
     public void resetFirebase()
     {
-        myFireNombreRuta.removeValue();
+        try
+        {
+            myFireNombreRuta.removeValue();
 
-        Log.i("ConectarFirebase", "[ConectarFirebase.resetFirebase]");
+            Log.i("ConectarFirebase", "[ConectarFirebase.resetFirebase]");
+        } catch (Exception e)
+        {
+            Log.e("ConectarFirebase", "[ConectarFirebase.resetFirebase]");
+        }
     }
 }

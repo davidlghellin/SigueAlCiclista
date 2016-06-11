@@ -8,17 +8,13 @@ import android.support.v7.app.NotificationCompat;
 import com.david.proyecto.ciclo.siguealciclista.R;
 
 /**
- * David López González on 11/05/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 11/05/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class MisNotificaciones
 {
     public static Notification mostrarNotificacion(Context context, String titulo, String texto)
     {
-        System.out.println("Titulo:::   " + titulo);
-        System.out.println("Texto:::   " + texto);
-
-
         return new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_ciclista)
                 .setContentTitle(titulo)

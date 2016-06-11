@@ -5,6 +5,10 @@ import android.os.Bundle;
 
 import com.david.proyecto.ciclo.siguealciclista.R;
 
+/**
+ * @author David López González.
+ *         Proyecto ciclo DAM I.E.S Alquerías
+ */
 public class ActivitySeguidor extends AppCompatActivity
 {
     @Override

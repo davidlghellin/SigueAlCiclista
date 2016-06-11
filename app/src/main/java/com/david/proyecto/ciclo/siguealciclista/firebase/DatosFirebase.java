@@ -3,8 +3,8 @@ package com.david.proyecto.ciclo.siguealciclista.firebase;
 import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
 
 /**
- * David López González on 4/05/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 4/05/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class DatosFirebase
 {
@@ -19,15 +19,34 @@ public class DatosFirebase
 
     // constructores
     public DatosFirebase(){}
-    public DatosFirebase(String usuario, Coordenadas coordenadas){this.usuario = usuario;this.coordenadas = coordenadas;}
+
+    public DatosFirebase(String usuario, Coordenadas coordenadas)
+    {
+        this.usuario = usuario;
+        this.coordenadas = coordenadas;
+    }
 
     // getters
-    public Coordenadas getCoordenadas(){return coordenadas;}
-    public String getUsuario(){return usuario;}
+    public Coordenadas getCoordenadas()
+    {
+        return coordenadas;
+    }
+
+    public String getUsuario()
+    {
+        return usuario;
+    }
 
     // setters
-    public void setCoordenadas(Coordenadas coordenadas){this.coordenadas = coordenadas;}
-    public void setUsuario(String usuario){this.usuario = usuario;}
+    public void setCoordenadas(Coordenadas coordenadas)
+    {
+        this.coordenadas = coordenadas;
+    }
+
+    public void setUsuario(String usuario)
+    {
+        this.usuario = usuario;
+    }
 
     @Override
     public String toString()

@@ -3,21 +3,19 @@ package com.david.proyecto.ciclo.siguealciclista;
 import java.util.Date;
 
 /**
- * David López González on 7/05/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 7/05/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
+ * @deprecated
  */
 public class LineaBBDD
 {
-    //TODO de momento no se usa, era para que fuera las tuplas de la bbdd
     private String carrera;
     private Date fecha;
     private String usuario;
     private float latitud;
     private float longitud;
 
-    public LineaBBDD()
-    {
-    }
+    public LineaBBDD(){}
 
     public LineaBBDD(String carrera, Date fecha, String usuario, float latitud, float longitud)
     {

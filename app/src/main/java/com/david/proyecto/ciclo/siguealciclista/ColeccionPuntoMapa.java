@@ -17,12 +17,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by wizord on 6/06/16.
+ * @author David López González on  6/06/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class ColeccionPuntoMapa implements Serializable
 {
     private static final long serialVersionUID = 8799656478674716638L;
-    List<PuntoMapa> lista;
+    private List<PuntoMapa> lista;
 
     ColeccionPuntoMapa()
     {
@@ -56,9 +57,9 @@ public class ColeccionPuntoMapa implements Serializable
 
     public void serializar()
     {
-       try
+        try
         {
-            File directorio = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File directorio = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             String timeStamp = new SimpleDateFormat("yyyyMMdd").format(new Date());
             File fichero = new File(directorio + "/" + timeStamp);
 
@@ -66,11 +67,11 @@ public class ColeccionPuntoMapa implements Serializable
 
             oos.writeObject(this);
             oos.close();
-            Log.i("ColeccionPuntoMapa","[ColeccionPuntoMapa.serializar]");
+            Log.i("ColeccionPuntoMapa", "[ColeccionPuntoMapa.serializar]");
         } catch (IOException e)
         {
             e.printStackTrace();
-            Log.e("ColeccionPuntoMapa","[ColeccionPuntoMapa.serializar]");
+            Log.e("ColeccionPuntoMapa", "[ColeccionPuntoMapa.serializar]");
         }
     }
 }

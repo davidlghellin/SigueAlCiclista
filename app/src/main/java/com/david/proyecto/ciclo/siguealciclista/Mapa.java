@@ -19,8 +19,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 /**
- * David López González on 8/05/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 8/05/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class Mapa
 {
@@ -29,6 +29,12 @@ public class Mapa
     private Activity activity;
     private int intRMapa = 0;
 
+    /**
+     * Constructor pasando el contexto y la actividad
+     *
+     * @param context  Contexto de la actividad
+     * @param activity Actividad donde
+     */
     public Mapa(Context context, Activity activity)
     {
         this.context = context;
@@ -37,11 +43,11 @@ public class Mapa
         GPS gpsActual = new GPS(context);
         LatLng latLng = new LatLng(gpsActual.getCoordenadas().getLatitud(), gpsActual.getCoordenadas().getLongitud());
         inicializarMapa(latLng);
-        Log.i("Mapa", "Mapa: " + gpsActual.getCoordenadas());
+        Log.i("Mapa", "[Mapa.Mapa]: " + gpsActual.getCoordenadas());
     }
 
     /**
-     * Constructor especificando el elemento id del mapa
+     * Constructor pasando la actividad y especificando el mapa
      *
      * @param activity
      * @param intRMapa
@@ -55,9 +61,16 @@ public class Mapa
         GPS gpsActual = new GPS(context);
         LatLng latLng = new LatLng(gpsActual.getCoordenadas().getLatitud(), gpsActual.getCoordenadas().getLongitud());
         inicializarMapa(latLng);
-        Log.i("Mapa", "Mapa: " + gpsActual.getCoordenadas());
+        Log.i("Mapa", "[Mapa.Mapa]: " + gpsActual.getCoordenadas());
     }
 
+    /**
+     * Constructor
+     *
+     * @param context
+     * @param mMap
+     * @param activity
+     */
     public Mapa(Context context, GoogleMap mMap, Activity activity)
     {
         this.mMap = mMap;
@@ -67,9 +80,14 @@ public class Mapa
         GPS gpsActual = new GPS(context);
         LatLng latLng = new LatLng(gpsActual.getCoordenadas().getLatitud(), gpsActual.getCoordenadas().getLongitud());
         inicializarMapa(latLng);
-        Log.i("Mapa", "Mapa: " + gpsActual.getCoordenadas());
+        Log.i("Mapa", "[Mapa.Mapa]: " + gpsActual.getCoordenadas());
     }
 
+    /**
+     * Método para inicializar el mapa y poder usar dicho mapa
+     *
+     * @param latLng
+     */
     private void inicializarMapa(LatLng latLng)
     {
         // Configuramos el objeto GoogleMaps con valores iniciales.
@@ -113,8 +131,7 @@ public class Mapa
 
                 //http://www.joellipman.com/articles/google/android/application-development/basic-android-app-using-google-maps-and-current-location.html
                 CameraPosition cameraPosition = new CameraPosition.Builder()
-                        //.target(ALQUERIAS)      // Sets the center of the map to LatLng (refer to previous snippet)
-                        .target(latLng)
+                        .target(latLng)             // Sets the center of the map to LatLng (refer to previous snippet)
                         .zoom(17)                   // Sets the zoom
                         .bearing(90)                // Sets the orientation of the camera to east
                         .tilt(30)                   // Sets the tilt of the camera to 30 degrees
@@ -122,6 +139,7 @@ public class Mapa
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         }
+        Log.i("Mapa", "[Mapa.inicializarMapa]");
     }
 
     /**
@@ -154,12 +172,25 @@ public class Mapa
         //    mapa.drawPolilyne(new PolylineOptions().add(latLng).add(ALQUERIAS).color(Color.RED));
     }
 
+    /**
+     * Método para pintar en el mapa líneas indicando dos puntos y un color para pintar la ruta
+     *
+     * @param puntoA Punto inicial para trazar la línea
+     * @param puntoB Punto final para trazar la línea
+     */
     public void marcarRuta(LatLng puntoA, LatLng puntoB)
     {
         this.drawPolilyne(new PolylineOptions().add(puntoA).add(puntoB));
         Log.i("Mapa", "[Mapa.marcarRuta]");
     }
 
+    /**
+     * Método para pintar en el mapa líneas indicando dos puntos y un color para pintar la ruta
+     *
+     * @param puntoA Punto inicial para trazar la línea
+     * @param puntoB Punto final para trazar la línea
+     * @param color  Color para pintar la línea
+     */
     public void marcarRuta(LatLng puntoA, LatLng puntoB, int color)
     {
         this.drawPolilyne(new PolylineOptions().add(puntoA).add(puntoB).color(color));

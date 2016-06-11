@@ -12,8 +12,8 @@ import com.david.proyecto.ciclo.siguealciclista.helpers.Preferencias;
 import java.util.ArrayList;
 
 /**
- * David López González on 14/05/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 14/05/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class ManejadorBD extends SQLiteOpenHelper
 {
@@ -32,10 +32,10 @@ public class ManejadorBD extends SQLiteOpenHelper
         try
         {
             db.execSQL(bbdd());
-            Log.i("ManejadorBD", "La base de datos se ha creado [ManejadorBD.onCreate]");
+            Log.i("ManejadorBD", "[ManejadorBD.onCreate]");
         } catch (Exception e)
         {
-            Log.e("ManejadorBD", "Error en [ManejadorBD.onCreate]");
+            Log.e("ManejadorBD", "[ManejadorBD.onCreate]");
         }
     }
 
@@ -48,10 +48,10 @@ public class ManejadorBD extends SQLiteOpenHelper
             db.execSQL("DROP TABLE IF EXISTS PuntoMapa;");
             //Se crea la nueva versión de la tabla
             db.execSQL(bbdd());
-            Log.i("BBDD", "La base de datos se ha actualizado [ManejadorBD.onUpgrade]");
+            Log.i("BBDD", "[ManejadorBD.onUpgrade]");
         } catch (Exception e)
         {
-            Log.e("ManejadorBD", "Error en [ManejadorBD.onUpgrade]");
+            Log.e("ManejadorBD", "[ManejadorBD.onUpgrade]");
         }
     }
 
@@ -61,10 +61,10 @@ public class ManejadorBD extends SQLiteOpenHelper
         {
             db.execSQL("DROP TABLE IF EXISTS PuntoMapa;");
             db.execSQL(bbdd());
-            Log.i("ManejadorBD", "La tabla de la base de datos se ha borrado [ManejadorBD.borrarBBDD]");
+            Log.i("ManejadorBD", "[ManejadorBD.borrarBBDD]");
         } catch (Exception e)
         {
-            Log.i("ManejadorBD", "Error en [ManejadorBD.borrarBBDD]");
+            Log.i("ManejadorBD", "[ManejadorBD.borrarBBDD]");
         }
     }
 
@@ -105,10 +105,10 @@ public class ManejadorBD extends SQLiteOpenHelper
                     datos.add(punto);
                 } while (c.moveToNext());
             }
-            Log.i("ManejadorBD", "Obtenemos datos [ManejadorBD.getDatos]");
+            Log.i("ManejadorBD", "[ManejadorBD.getDatos]");
         } catch (Exception e)
         {
-            Log.e("ManejadorBD", "Error en [ManejadorBD.getDatos]");
+            Log.e("ManejadorBD", "[ManejadorBD.getDatos]");
         }
         return datos;
     }
@@ -133,10 +133,10 @@ public class ManejadorBD extends SQLiteOpenHelper
                     datos.add(punto);
                 } while (c.moveToNext());
             }
-            Log.i("ManejadorBD", "Obtenemos datos [ManejadorBD.getDatosRuta]");
+            Log.i("ManejadorBD", "[ManejadorBD.getDatosRuta]");
         } catch (Exception e)
         {
-            Log.e("ManejadorBD", "Error en [ManejadorBD.getDatosRuta]");
+            Log.e("ManejadorBD", "[ManejadorBD.getDatosRuta]");
         }
 
         return datos;
@@ -181,10 +181,10 @@ public class ManejadorBD extends SQLiteOpenHelper
             try
             {
                 insertarPuntoMapa(db, p);
-                Log.i("ManejadorBD", "Añadimos registro a BBDD [ManejadorBD.insertarCoordenadaComprobandoBBDD]");
+                Log.i("ManejadorBD", "[ManejadorBD.insertarCoordenadaComprobandoBBDD]");
             } catch (Exception e)
             {
-                Log.e("ManejadorBD", "Error en [ManejadorBD.insertarCoordenadaComprobandoBBDD]");
+                Log.e("ManejadorBD", "[ManejadorBD.insertarCoordenadaComprobandoBBDD]");
                 return false;
             }
             return true;
@@ -195,15 +195,15 @@ public class ManejadorBD extends SQLiteOpenHelper
     public void insertarCoordenada(SQLiteDatabase db, PuntoMapa p)
     {
         if (p.getFecha() == null || p.getRuta() == null || p.getUser() == null || comprobarRutaGrupoHora(db, p))
-            return ;
+            return;
         try
         {
             insertarPuntoMapa(db, p);
-            Log.i("ManejadorBD", "BBDD [ManejadorBD.insertarCoordenada]");
+            Log.i("ManejadorBD", "[ManejadorBD.insertarCoordenada]");
         } catch (Exception e)
         {
-            Log.e("ManejadorBD", "Error en [ManejadorBD.insertarCoordenada]");
-            return ;
+            Log.e("ManejadorBD", "[ManejadorBD.insertarCoordenada]");
+            return;
         }
     }
 
@@ -219,23 +219,30 @@ public class ManejadorBD extends SQLiteOpenHelper
                     p.getCoordenadas().getLongitud() + "','" +
                     p.getCoordenadas().getLatitud() +
                     "');");
-            Log.i("ManejadorBD", "Añadimos registro a BBDD [ManejadorBD.insertarPuntoMapa]");
+            Log.i("ManejadorBD", "[ManejadorBD.insertarPuntoMapa]");
         } catch (Exception e)
         {
-            Log.e("ManejadorBD", "Error en [ManejadorBD.insertarPuntoMapa]");
+            Log.e("ManejadorBD", "[ManejadorBD.insertarPuntoMapa]");
         }
     }
 
     public void verDatosSinRepetir(SQLiteDatabase db)
     {
-        ArrayList<PuntoMapa> datos = getDatosRuta(db);
-        PuntoMapa aux = new PuntoMapa(new Coordenadas(0.f, 0.f));
-        for (PuntoMapa p : datos)
+        try
         {
-            if (p.distintos(aux))
+            ArrayList<PuntoMapa> datos = getDatosRuta(db);
+            PuntoMapa aux = new PuntoMapa(new Coordenadas(0.f, 0.f));
+            for (PuntoMapa p : datos)
             {
-                aux.setCoordenadas(p.getCoordenadas());
+                if (p.distintos(aux))
+                {
+                    aux.setCoordenadas(p.getCoordenadas());
+                }
             }
+            Log.i("ManejadorBD", "[ManejadorBD.verDatosSinRepetir]");
+        } catch (Exception e)
+        {
+            Log.e("ManejadorBD", "[ManejadorBD.verDatosSinRepetir]");
         }
     }
 
@@ -275,12 +282,18 @@ public class ManejadorBD extends SQLiteOpenHelper
      */
     public void verDatos(SQLiteDatabase db)
     {
-        ArrayList<PuntoMapa> datos = getDatos(db);
-        for (PuntoMapa p : datos)
+        try
         {
-            System.out.println(p);
+            ArrayList<PuntoMapa> datos = getDatos(db);
+            for (PuntoMapa p : datos)
+            {
+                System.out.println(p);
+            }
+            Log.i("ManejadorBD", "[ManejadorBD.verDatos]");
+        } catch (Exception e)
+        {
+            Log.e("ManejadorBD", "[ManejadorBD.verDatos]");
         }
-        Log.i("ManejadorBD", "[ManejadorBD.verDatos]");
     }
 
     /**
@@ -295,5 +308,15 @@ public class ManejadorBD extends SQLiteOpenHelper
         {
             System.out.println(p);
         }
+    }
+
+    public String getUltimoUsuario(SQLiteDatabase db)
+    {
+        Cursor c = db.rawQuery("SELECT user FROM PuntoMapa WHERE " +
+                "ruta = \"" + Preferencias.getRuta(context) + "\" " +
+                "ORDER BY \"" + Preferencias.getRuta(context) + "\" DESC LIMIT 1", null);
+
+        c.moveToFirst();
+        return c.getString(0);
     }
 }

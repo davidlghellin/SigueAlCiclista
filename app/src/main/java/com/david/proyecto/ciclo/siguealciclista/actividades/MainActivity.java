@@ -33,6 +33,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * @author David López González.
+ *         Proyecto ciclo DAM I.E.S Alquerías
+ */
 public class MainActivity extends AppCompatActivity
 {
     private String FIREBASE_URL = "https://sigue-al-ciclista.firebaseio.com/";
@@ -58,13 +62,14 @@ public class MainActivity extends AppCompatActivity
 
         Firebase.setAndroidContext(this);
         ButterKnife.bind(this);
+
+        // Fondo o imágen de fondo de
         findViewById(R.id.relativeLayoutPrincipal).setBackgroundColor(Color.BLUE);
         // findViewById(R.id.relativeLayoutPrincipal).setBackground(getResources().getDrawable(R.drawable.boton_cuircular));
 
 
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        // myFirebaseRef = new Firebase(FIREBASE_URL).child(Preferencias.getRuta(getApplicationContext()) + "/Actual");
         myFirebaseRef = new Firebase(FIREBASE_URL).child(Preferencias.getRutaActual(getApplicationContext()));
         FIREBASE_RUTA = FIREBASE_URL + Preferencias.getRuta(getApplicationContext());
 
@@ -76,20 +81,10 @@ public class MainActivity extends AppCompatActivity
         startService(intent);
 
 
-        ManejadorBD usdbh = new ManejadorBD(this, Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
-        SQLiteDatabase db = usdbh.getWritableDatabase();
-        usdbh.verDatos(db);
-        List<PuntoMapa> lista = usdbh.getPuntoMapaRutaSinRepetir(db);
-        ColeccionPuntoMapa coleccionPuntoMapa=new ColeccionPuntoMapa(lista);
-        coleccionPuntoMapa.serializar();
-        // Reset
-        //UtilsBBDD.borrarDatosSQL(db);
+        // Reset para pruebas en Sqlite
+        // UtilsBBDD.borrarDatosSQL(db);
 
         mapa = new Mapa(this, R.id.mapPrincipal);
-
-        //Firebase myFirebaseEvent = new Firebase(FIREBASE_URL + Preferencias.getRuta(getApplicationContext()));
-        //myFirebaseEvent.addChildEventListener(new MiChildEventListener(MainActivity.this));
-
     }
 
     // Menú
@@ -162,9 +157,6 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         //actualizarRutaAct();
         actualizarChildEventListener();
-        //TODO revisar esta mal, ya que cada vez que entra a la actividad crea el eventListener
-        //Firebase myFirebaseRef2 = new Firebase(FIREBASE_URL + Preferencias.getRuta(getApplicationContext()));
-        //myFirebaseRef2.addChildEventListener(new MiChildEventListener(MainActivity.this));
     }
 
     /**

@@ -4,8 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 /**
- * David López González on 14/05/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 14/05/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class UtilsBBDD
 {
@@ -23,7 +23,7 @@ public class UtilsBBDD
      * Método para insertar un dato en la BBDD
      *
      * @param db BBDD con la que trabajamos SQLiteDatabase
-     * @param p PuntoMapa que queremos insertar en la BBDD
+     * @param p  PuntoMapa que queremos insertar en la BBDD
      * @return
      */
     public static boolean insertSQL(SQLiteDatabase db, PuntoMapa p)
@@ -40,15 +40,14 @@ public class UtilsBBDD
                     p.getCoordenadas().getLongitud() + "','" +
                     p.getCoordenadas().getLatitud() +
                     "');");
-            Log.i("BBDD","Añadimos registro a BBDD");
+            Log.i("BBDD", "Añadimos registro a BBDD");
         } catch (Exception e)
         {
-            Log.e("BBDD","Error al añadir registro a BBDD"+db);
+            Log.e("BBDD", "Error al añadir registro a BBDD" + db);
             return false;
         }
         return true;
     }
-
 
 
     /**
@@ -61,11 +60,11 @@ public class UtilsBBDD
     {
         try
         {
-            Log.i("BBDD","Eliminamos registros BBDD");
+            Log.i("BBDD", "Eliminamos registros BBDD");
             db.execSQL("DELETE FROM PuntoMapa;");
         } catch (Exception e)
         {
-            Log.e("BBDD","Error al eliminar registros BBDD");
+            Log.e("BBDD", "Error al eliminar registros BBDD");
             return false;
         }
         return true;

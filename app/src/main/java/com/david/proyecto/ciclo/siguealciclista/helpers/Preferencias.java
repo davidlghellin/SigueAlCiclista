@@ -7,8 +7,8 @@ import android.preference.PreferenceManager;
 import com.google.android.gms.maps.GoogleMap;
 
 /**
- * David López González on 14/05/16.
- * Proyecto ciclo DAM I.E.S Alquerías
+ * @author David López González on 14/05/16.
+ *         Proyecto ciclo DAM I.E.S Alquerías
  */
 public class Preferencias
 {
@@ -43,7 +43,7 @@ public class Preferencias
     public static String getRuta(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return getGrupo(context) +" "+ prefs.getString("ruta", "defecto_ruta");
+        return getGrupo(context) + " " + prefs.getString("ruta", "defecto_ruta");
     }
 
     /**
@@ -66,6 +66,18 @@ public class Preferencias
      */
     public static String getRutaActual(Context context)
     {
-        return  getRuta(context) + "/Actual";
+        return getRuta(context) + "/Actual";
+    }
+
+    /**
+     * Método que devuelve el correo electronico, para introducir más
+     *
+     * @param context
+     * @return
+     */
+    public static String[] getCorreo(Context context)
+    {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString("correo", "").split(" ");
     }
 }

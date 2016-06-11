@@ -80,7 +80,6 @@ public class ActivityEnCabeza extends AppCompatActivity
                         {
                             // Notificación de cambio de la cabeza
                             notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(getApplicationContext(),user,"Se produce cambio de cabeza"));
-
                             cancelarSeguimiento();
                         }
                     }

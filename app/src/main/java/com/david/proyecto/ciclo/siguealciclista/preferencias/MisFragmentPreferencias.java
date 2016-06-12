@@ -22,7 +22,6 @@ public class MisFragmentPreferencias extends PreferenceActivity
     @Override
     protected boolean isValidFragment(String fragmentName)
     {
-        //TODO NO OLVIDAR ESTO
         if (Usuario.class.getName().equals(fragmentName))
             return true;
         else if (Ruta.class.getName().equals(fragmentName))

@@ -66,7 +66,6 @@ public class GPS
 
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             {
-                // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -77,7 +76,6 @@ public class GPS
             }
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             {
-                // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -99,23 +97,21 @@ public class GPS
             locListener = new LocationListener()
             {
                 public void onLocationChanged(Location location)
-                {//no actualizamos
+                {
                     //guardarLogCoordenadas(location);
                 }
 
                 public void onProviderDisabled(String provider)
                 {
-                    //lblEstado.setText("Provider OFF");
                 }
 
                 public void onProviderEnabled(String provider)
                 {
-                    //lblEstado.setText("Provider ON ");
                 }
 
                 public void onStatusChanged(String provider, int status, Bundle extras)
                 {
-                    Log.i("", "Provider Status: " + status);
+                    Log.i("GPS", "[GPS.comenzarLocalizacion]: " + status);
                 }
             };
             //tiempo de actualizacion 2000

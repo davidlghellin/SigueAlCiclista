@@ -116,7 +116,8 @@ public class MainActivity extends AppCompatActivity
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish();  // TODO finish daba errores (sin tener las lineas anteriores)
+                finish();  // finish daba errores (sin tener las lineas anteriores)
+                // Alternativa a nivel de sistema
                 // android.os.Process.killProcess(android.os.Process.myPid());
                 break;
         }
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity
      */
     private void actualizarRutaAct()
     {
-        // TODO: 15/05/16  intentar varias veces
+        // intentar varias veces
         int i = 0;
         boolean ok = false;
         while (i < 3 && !ok)

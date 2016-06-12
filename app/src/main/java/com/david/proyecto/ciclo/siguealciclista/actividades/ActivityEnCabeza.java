@@ -52,12 +52,13 @@ public class ActivityEnCabeza extends AppCompatActivity
 
         // GPS
         gpsActual = new GPS(getApplicationContext());
+        // Activar servicio
         final Intent intent = new Intent(getApplicationContext(), MarcarRutaService.class);
         GetContext.setContext(getApplicationContext());
         startService(intent);
-        final NotificationManager  notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        final NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        // Para controlar el cambio de usuario
+        // Controlar el cambio de usuario
         myFirebaseEvent = new Firebase("https://sigue-al-ciclista.firebaseio.com/" + Preferencias.getRuta(getApplicationContext()));
         final ChildEventListener childEventListener = new ChildEventListener()
         {
@@ -79,7 +80,7 @@ public class ActivityEnCabeza extends AppCompatActivity
                         if (!user.equals(Preferencias.getUsuario(getApplicationContext())))
                         {
                             // Notificación de cambio de la cabeza
-                            notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(getApplicationContext(),user,"Se produce cambio de cabeza"));
+                            notificationManager.notify(0, MisNotificaciones.mostrarNotificacion(getApplicationContext(), user, "Se produce cambio de cabeza"));
                             cancelarSeguimiento();
                         }
                     }
@@ -87,25 +88,31 @@ public class ActivityEnCabeza extends AppCompatActivity
             }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot){}
+            public void onChildRemoved(DataSnapshot dataSnapshot)
+            {
+            }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s){}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s)
+            {
+            }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError){}
+            public void onCancelled(FirebaseError firebaseError)
+            {
+            }
         };
         myFirebaseEvent.addChildEventListener(childEventListener);
+        // FIN Controlar el cambio de usuario
 
         mapa = new Mapa(getApplicationContext(), this);
-
     }
 
     @OnClick(R.id.btnCancelarSeguimiento)
     public void cancelarSeguimiento()
     {
         mapa = null;
-        System.gc();
+        System.gc();    // Recolector de basura
 
         android.os.Process.killProcess(android.os.Process.myPid());
         finish();
@@ -124,9 +131,5 @@ public class ActivityEnCabeza extends AppCompatActivity
     }
 
     @Override
-    protected void onResume()
-    {
-        super.onResume();
-        //TODO probar a poner el onCreate en un método e incluirlo aquí
-    }
+    protected void onResume(){super.onResume();}
 }

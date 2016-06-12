@@ -89,7 +89,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         datosUnicos = usdbh.getPuntoMapaRutaSinRepetir(db);
         if (datosUnicos.size() > 0)
             mMap.addMarker(new MarkerOptions().position(new LatLng(datosUnicos.get(0).getCoordenadas().getLatitud(), datosUnicos.get(0).getCoordenadas().getLongitud())).title("Salida"));
-        System.out.println(datosUnicos.size() + " lllll");
         if (datosUnicos.size() >= 2)
             for (int i = 0; i < datosUnicos.size() - 1; i++)
             {

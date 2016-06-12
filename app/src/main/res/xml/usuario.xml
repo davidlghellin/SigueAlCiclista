@@ -9,7 +9,7 @@
 
     <EditTextPreference
         android:key="correo"
-        android:summary="Escribe la dirección de correo electronica"
+        android:summary="Escribe la dirección de correo electrónico"
         android:title="Correo electronico">
     </EditTextPreference>
 

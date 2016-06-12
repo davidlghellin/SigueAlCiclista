@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import com.david.proyecto.ciclo.siguealciclista.BBDD.ManejadorBD;
@@ -45,28 +46,49 @@ public class GestionarBBDD extends AppCompatActivity
     @OnClick(R.id.btnEnviarDatosACorreo)
     public void enviarCorreo()
     {
+        try
+        {
+            ManejadorBD usdbh = new ManejadorBD(this, Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
+            SQLiteDatabase db = usdbh.getWritableDatabase();
+            //usdbh.verDatos(db);
+            List<PuntoMapa> lista = usdbh.getPuntoMapaRutaSinRepetir(db);
+            ColeccionPuntoMapa coleccionPuntoMapa = new ColeccionPuntoMapa(lista);
+            coleccionPuntoMapa.serializar();
 
-        ManejadorBD usdbh = new ManejadorBD(this, Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
-        SQLiteDatabase db = usdbh.getWritableDatabase();
-        //usdbh.verDatos(db);
-        List<PuntoMapa> lista = usdbh.getPuntoMapaRutaSinRepetir(db);
-        ColeccionPuntoMapa coleccionPuntoMapa = new ColeccionPuntoMapa(lista);
-        coleccionPuntoMapa.serializar();
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setData(Uri.parse("mailto:"));
+            emailIntent.putExtra(Intent.EXTRA_CC, Preferencias.getCorreo(getApplicationContext()));
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Ruta ciclista");
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "El fichero adjuntado son los datos de la carrera " +
+                    "perteneciente a la ruta" + Preferencias.getRuta(getApplicationContext()) + ".");
+            //emailIntent.setType("message/rfc822");
+            emailIntent.setType("text/plain");
 
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.setData(Uri.parse("mailto:"));
-        emailIntent.putExtra(Intent.EXTRA_CC, Preferencias.getCorreo(getApplicationContext()));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Ruta ciclista");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "El fichero adjuntado son los datos de la carrera " +
-                "perteneciente a la ruta" + Preferencias.getRuta(getApplicationContext()) + ".");
-        //emailIntent.setType("message/rfc822");
-        emailIntent.setType("text/plain");
+            File directorio = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File archivo = new File(directorio + "/" + new SimpleDateFormat("yyyyMMdd").format(new Date()));
+            emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(archivo));
 
-        File directorio = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File archivo = new File(directorio + "/" + new SimpleDateFormat("yyyyMMdd").format(new Date()));
-        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(archivo));
+            startActivity(Intent.createChooser(emailIntent, "Email "));
 
-        startActivity(Intent.createChooser(emailIntent, "Email "));
+            Log.i("GestionarBBDD", "[GestionarBBDD.enviarCorreo]");
+        } catch (Exception e)
+        {
+            Log.e("GestionarBBDD", "[GestionarBBDD.enviarCorreo]");
+        }
     }
 
+    @OnClick(R.id.btnResetBBDD)
+    public void resetBBDD()
+    {
+        try
+        {
+            ManejadorBD usdbh = new ManejadorBD(this, Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
+            SQLiteDatabase db = usdbh.getWritableDatabase();
+            usdbh.borrarBBDD(db);
+            Log.i("GestionarBBDD", "[GestionarBBDD.resetBBDD]");
+        } catch (Exception e)
+        {
+            Log.e("GestionarBBDD", "[GestionarBBDD.resetBBDD]");
+        }
+    }
 }

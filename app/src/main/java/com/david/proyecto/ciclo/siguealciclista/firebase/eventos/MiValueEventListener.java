@@ -82,7 +82,6 @@ public class MiValueEventListener implements ValueEventListener
             final String fechaCambios = (String) snapshot.getValue();
             if (fechaCambios != null)
             {
-                //TODO cuando se produzca el cambio hay q buscar ese valor en la raiz de la ruta
                 //necesito la fecha para poner el valor en la linea de abajo y así obtener los datos
                 Firebase f = new Firebase(FIREBASE_URL + "/" + Preferencias.getRuta(activity.getApplicationContext())
                         + "/" + fechaCambios);
@@ -101,7 +100,7 @@ public class MiValueEventListener implements ValueEventListener
                             float longitud = Float.parseFloat(snapshot.child("Longitud").getValue().toString());
                             String user = snapshot.child("User").getValue().toString();
                             Toast.makeText(activity.getApplicationContext(), snapshot.getValue().toString(), Toast.LENGTH_SHORT).show();
-                            //TODO aqui meteriamos en la BBDD
+
                             usdbh.insertarCoordenada(db, new PuntoMapa(fechaCambios, Preferencias.getRuta(activity.getApplicationContext()), user, new Coordenadas(longitud, latitud)));
                             String critico = snapshot.child("Critico").getValue().toString();
                             if (critico.equals("si"))

@@ -20,7 +20,6 @@ import java.util.Date;
 
 public class MarcarRutaService extends IntentService
 {
-    // TODO segundo plano
     private GPS gps;
 
     private ManejadorBD usdbh;
@@ -38,7 +37,6 @@ public class MarcarRutaService extends IntentService
     @Override
     public IBinder onBind(Intent intent)
     {
-        // TODO: Return the communication channel to the service.
         //throw new UnsupportedOperationException("Not yet implemented");
         return null;
     }
@@ -49,14 +47,13 @@ public class MarcarRutaService extends IntentService
         Context context = GetContext.getContext();
         this.gps = new GPS(context);
         conectarFirebase = new ConectarFirebase(context);
-        usdbh = new ManejadorBD(this, Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
-        db = usdbh.getWritableDatabase();
+        //usdbh = new ManejadorBD(this, Preferencias.getNombreFirebase(), null, UtilsBBDD.versionSQL());
+        //db = usdbh.getWritableDatabase();
 
         while (true)
         {
             gps.actualizarCoordenadas();
-            //TODO comprobar antes de subir
-           // if (!coordenadasAux.compararCoordenadas(gps.getCoordenadas()))
+            if (!coordenadasAux.compararCoordenadas(gps.getCoordenadas()))
             {
                 // UtilsBBDD.insertSQL(db,new PuntoMapa(FechaHelper.converterFecha(new Date()), Preferencias.getRuta(context), Preferencias.getUsuario(context), gps.getCoordenadas()));
                 conectarFirebase.subirDatos(gps.getCoordenadas(), new Date());

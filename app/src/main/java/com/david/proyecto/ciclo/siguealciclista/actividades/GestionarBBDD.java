@@ -60,7 +60,7 @@ public class GestionarBBDD extends AppCompatActivity
             emailIntent.putExtra(Intent.EXTRA_CC, Preferencias.getCorreo(getApplicationContext()));
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Ruta ciclista");
             emailIntent.putExtra(Intent.EXTRA_TEXT, "El fichero adjuntado son los datos de la carrera " +
-                    "perteneciente a la ruta" + Preferencias.getRuta(getApplicationContext()) + ".");
+                    "perteneciente a la ruta " + Preferencias.getRuta(getApplicationContext()) + ".");
             //emailIntent.setType("message/rfc822");
             emailIntent.setType("text/plain");
 

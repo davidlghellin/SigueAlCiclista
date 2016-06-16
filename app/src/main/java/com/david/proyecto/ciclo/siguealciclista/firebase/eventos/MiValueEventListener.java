@@ -12,7 +12,6 @@ import com.david.proyecto.ciclo.siguealciclista.BBDD.PuntoMapa;
 import com.david.proyecto.ciclo.siguealciclista.BBDD.UtilsBBDD;
 import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
 import com.david.proyecto.ciclo.siguealciclista.firebase.ConectarFirebase;
-import com.david.proyecto.ciclo.siguealciclista.firebase.DatosFirebase;
 import com.david.proyecto.ciclo.siguealciclista.helpers.MisNotificaciones;
 import com.david.proyecto.ciclo.siguealciclista.helpers.Preferencias;
 import com.firebase.client.DataSnapshot;
@@ -29,7 +28,6 @@ public class MiValueEventListener implements ValueEventListener
     private final String FIREBASE_URL;
     private Activity activity;
     private NotificationManager notificationManager;
-    private DatosFirebase datosFirebase;
     private ManejadorBD usdbh;
     private SQLiteDatabase db;
 

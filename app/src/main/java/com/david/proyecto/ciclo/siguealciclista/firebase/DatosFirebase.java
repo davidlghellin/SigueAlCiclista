@@ -5,6 +5,7 @@ import com.david.proyecto.ciclo.siguealciclista.Coordenadas;
 /**
  * @author David López González on 4/05/16.
  *         Proyecto ciclo DAM I.E.S Alquerías
+ * @deprecated
  */
 public class DatosFirebase
 {
